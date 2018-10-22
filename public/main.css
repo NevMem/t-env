@@ -1,0 +1,54 @@
+* {
+    padding: 0 0;
+    margin: 0 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 200;
+}
+
+:root {
+    --background-color: rgb(23, 4, 37);   
+}
+
+html {
+    background-color: var(--background-color);
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(16, 1fr);
+    grid-template-rows: 70px 200px auto;
+    min-height: 100vh;
+    grid-gap: 20px;
+}
+
+.tests {
+    grid-column: 3 / 15;
+    background-color: white;
+}
+
+header {
+    grid-column: 3 / 15;
+    background-color: indigo;
+    line-height: 70px;
+    padding-left: 10px;
+    color: white;
+}
+
+header span {
+    float: right;
+    padding-right: 20px;
+    font-size: .7em;
+    color: rgba(238, 238, 238, 0.459); 
+}
+
+.card {
+    grid-column: 3 / 15;
+}
+
+.queue {
+
+}
+
+#app {
+    min-height: 100vh;
+}
