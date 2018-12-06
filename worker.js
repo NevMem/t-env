@@ -1,7 +1,18 @@
 let cp = require('child_process')
 const EventEmitter = require('events')
 let invokationLoop = new EventEmitter()
+let fs = require('fs')
 require('colors')
+
+let onlineChanges = undefined
+let emitOnline = (type, message) => {
+    if (onlineChanges)
+        onlineChanges.emit(type, message)
+}
+
+exports.onlineEmitter = (eventer) => {
+    onlineChanges = eventer
+}
 
 let config = {
     id_length: 10
@@ -11,6 +22,18 @@ let tests = []
 let invokationQueue = []
 let currentIndex = 0
 let runningNow = false
+
+let saveTests = () => {
+    fs.writeFileSync('tests.json', JSON.stringify(tests))
+    console.log('Saved test.json'.cyan)
+    console.log((tests.length + '').green)
+}
+
+let loadTests = () => {
+    let data = fs.readFileSync('tests.json', 'utf-8')
+    tests = JSON.parse(data)
+    console.log('Loaded test from file'.green + (' count of tests : ' + tests.length).cyan)
+}
 
 invokationLoop.on('new item', () => {
     invokationLoop.emit('try run')
@@ -35,15 +58,30 @@ invokationLoop.on('run', () => {
     })
     invoker.on('message', message => {
         if (message.type === 'feedback') {
-            invokationQueue[currentIndex].feedback[message.test_id] = message.feedback
+            invokationQueue[currentIndex].feedback[message.test_id].time = message.feedback.time
+            invokationQueue[currentIndex].feedback[message.test_id].stdout = message.feedback.stdout
+            invokationQueue[currentIndex].feedback[message.test_id].stderr = message.feedback.stderr
+            invokationQueue[currentIndex].feedback[message.test_id].exitCode = message.feedback.exitCode
+            invokationQueue[currentIndex].feedback[message.test_id].status = message.feedback.status
         } else if (message.type === 'change status') {
             invokationQueue[currentIndex].status = message.status
+            emitOnline('change status', {
+                queueIndex: currentIndex, 
+                status: invokationQueue[currentIndex].status
+            })
         } else {
             console.log(('Unknown message type: ' + message.type).red)
         }
+        emitOnline('change feedback', {
+            queueIndex: currentIndex, 
+            feedback: invokationQueue[currentIndex].feedback
+        })
     })
     invoker.on('exit', (code, signal) => {
         console.log(`Invoker exited with code: ${code} signal: ${signal}`.magenta)
+        runningNow = false
+        currentIndex += 1
+        invokationLoop.emit('try run')
     })
 })
 
@@ -72,7 +110,7 @@ let createId = () => {
 
 let createTest = (input, output, testName) => {
     if (!testName) {
-        testName = 'u test'
+        testName = 'u_test ' + tests.length
     }
     return {
         name: testName,
@@ -88,6 +126,11 @@ exports.getTests = () => {
 
 exports.addTest = (input, output, testName) => {
     tests.push(createTest(input, output, testName))
+    saveTests()
+    return {
+        testName: tests[tests.length - 1].name,
+        id: tests[tests.length - 1].id
+    }
 }
 
 exports.addToQueue = (filename, compilationArgs, runType) => {
@@ -100,7 +143,7 @@ exports.addToQueue = (filename, compilationArgs, runType) => {
             status: 'waiting'
         }
         for (let i = 0; i != tests.length; ++i) {
-            newRecord.feedback.push({ info: 'waiting', stdout: '', stderr: '', exitCode: undefined, time: undefined })
+            newRecord.feedback.push({ testId: tests[i].id, status: 'waiting', stdout: '', stderr: '', exitCode: undefined, time: undefined })
         }
         invokationQueue.push(newRecord)
         console.log('New record was successfully added to invokation queue'.green)
@@ -122,11 +165,8 @@ exports.getQueue = () => {
     return invokationQueue
 }
 
-exports.addTest('1 2', '3')
-exports.addTest('3 4', '7')
-exports.addTest('100000000000 100000000000', '200000000000')
-exports.addTest('10 2', '12')
-exports.addTest('10 22', '32')
-// exports.addToQueue('D:\\memlo\\workspace\\prepare\\src\\contest.cpp', '', 'parallel')
+// exports.addTest('6 8 4 1 0 2 2 3 ? 1 6 ? 4 6 ? 2 5 ? 2 6 ! 3 3 ? 1 6 ! 4 0 ? 1 6', '5 0 3 4 0 5', 'BASIC')
 
 console.log('Current process pid', process.pid)
+
+loadTests()

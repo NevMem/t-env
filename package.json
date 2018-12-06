@@ -18,6 +18,7 @@
     "express": "^4.16.4",
     "jsonwebtoken": "^8.3.0",
     "pug": "^2.0.3",
+    "react-addons-update": "^15.6.2",
     "socket.io": "^2.1.1"
   },
   "devDependencies": {

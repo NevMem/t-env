@@ -66,6 +66,23 @@ function evaluate(executable, input, output) {
     })
 }
 
+let cut = (str) => {
+    let ret = []
+    now = ''
+    for (let i = 0; i < str.length; ++i) {
+        if (str[i] !== '\n' && str[i] !== '\r' && str[i] !== ' ') { 
+            now += str[i]
+        } else {
+            if (now.length !== 0)
+                ret.push(now)
+            now = ''
+        }
+    }
+    if (now.length !== 0)
+        ret.push(now)
+    return ret
+}
+
 async function run(executable) {
     for (let i = 0; i != tests.length; ++i) {
         feedback.push({
@@ -107,8 +124,8 @@ async function run(executable) {
             feedback[i].stderr = evaluationStatus.stderr
             feedback[i].time = evaluationStatus.time
             if (evaluationStatus.exitCode === 0) {
-                let expected = tests[i].output.split()
-                let found = feedback[i].stdout.split()
+                let expected = cut(tests[i].output)
+                let found = cut(feedback[i].stdout)
                 if (found.length != expected.length) {
                     feedback[i].status = 'presentation error'
                 } else {
@@ -116,7 +133,7 @@ async function run(executable) {
                     for (let j = 0; j != found.length; ++j) {
                         if (found[j] != expected[j]) {
                             feedback[i].status = 'wrong answer'
-                            allOf = false
+                            allOk = false
                             break
                         }
                     }
@@ -131,6 +148,10 @@ async function run(executable) {
                 type: 'feedback',
                 test_id: i,
                 feedback: feedback[i]
+            })
+            process.send({
+                type: 'change status',
+                status: 'Ready'
             })
         }
     }

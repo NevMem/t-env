@@ -7,6 +7,11 @@ let app = express()
 let server = http.Server(app)
 let io = require('socket.io')(server)
 
+const EventEmitter = require('events')
+let onlineChanges = new EventEmitter()
+
+worker.onlineEmitter(onlineChanges)
+
 let connections = []
 
 server.listen(80)
@@ -27,12 +32,17 @@ app.get('/', (req, res) => {
 io.on('connection', socket => {
     connections.push(socket)
     console.log('new socket.io connection'.yellow)
-    console.log(worker.getTests())
     for (let i = 0; i != worker.getTests().length; ++i) {
         socket.emit('new test', {
             testName: worker.getTests()[i].name, 
             id: worker.getTests()[i].id
         })
+    }
+
+    for (let i = 0; i != worker.getQueue().length; ++i) {
+        socket.emit('new record',
+            worker.getQueue()[i]
+        )
     }
 
     socket.on('get test info', (request) => {
@@ -48,11 +58,75 @@ io.on('connection', socket => {
         })
     })
 
+    socket.on('get test name by id', data => {
+        let test = worker.getTestById(data.testId)
+        if (!test)
+            return
+        socket.emit('test name by id', { testId: data.testId, name: test.name })
+    })
+
+    socket.on('get test input', data => {
+        let testId = data.testId
+        socket.emit('test input', {
+            testId: testId,
+            input: worker.getTestById(testId).input
+        })
+    })
+
+    socket.on('get test answer', data => {
+        let testId = data.testId
+        socket.emit('test answer', {
+            testId: testId,
+            answer: worker.getTestById(testId).output
+        })
+    })
+
+    socket.on('add test', data => {
+        let {input, output, name} = data
+        let info = worker.addTest(input, output, name)
+        onlineChanges.emit('test added', info)
+    })
+
+    socket.on('evaluate', () => {
+        console.log('We are here')
+        worker.addToQueue('D:\\memlo\\workspace\\prepare\\src\\contest.cpp', '-O2', 'single')
+        onlineChanges.emit('new record', worker.getQueue().length - 1)
+    })
+
     socket.on('disconnect', () => {
         console.log('disconnected one')
         let index = connections.indexOf(socket)
         if (index == -1)
             return
         connections.splice(index, 1)
+    })
+})
+
+let sendAll = (type, message) => {
+    for (let client of connections) {
+        client.emit(type, message)
+    }
+}
+
+onlineChanges.on('change feedback', (message) => {
+    for (let client of connections) {
+        client.emit('change feedback', message)
+    }
+})
+
+onlineChanges.on('change status', (message) => {
+    for (let client of connections) {
+        client.emit('change status', message)
+    }
+})
+
+onlineChanges.on('new record', (index) => {
+    sendAll('new record', worker.getQueue()[index])
+})
+
+onlineChanges.on('test added', (message) => {
+    sendAll('new test', {
+        testName: message.testName,
+        id: message.id
     })
 })
