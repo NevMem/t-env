@@ -406,48 +406,6 @@ header span {
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 20px;
-}
-
-.custom_checkbox {
-  display: flex;
-  flex-direction: row;
-}
-
-:root {
-  --checkbox-color: red;
-  --checkbox-hover-color: rgb(255, 177, 177);
-}
-
-.custom_checkbox div {
-  padding-left: 10px;
-  cursor: pointer;
-}
-
-.custom_checkbox span {
-  height: 20px;
-  width: 20px;
-  border: 2px solid var(--checkbox-color);
-  border-radius: 2px;
-  transition: all ease-in .1s;
-  cursor: pointer;
-  position: relative;
-}
-
-.custom_checkbox span:hover {
-  background-color: var(--checkbox-hover-color);
-}
-
-.custom_checkbox.active span {
-  background-color: var(--checkbox-color);
-}
-
-.custom_checkbox.active span:after {
-  position: absolute;
-  transform: rotate(-48deg) translateX(0px) translateY(2px);
-  width: 14px;
-  height: 8px;
-  border-bottom: 3px solid white;
-  border-left: 3px solid white;
-  /* border-radius: 2px; */
-  content: '';
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 }
