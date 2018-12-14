@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import CustomCheckBox from './CustomCheckBox'
 import CustomToggler from './CustomToggler';
+import CustomRangeSlider from './CustomRangeSlider';
 
 export default class EvaluationCard extends Component {
   constructor(prps) {
@@ -46,6 +47,7 @@ export default class EvaluationCard extends Component {
     return (
       <div className = 'evaluation-card'>
         <div className = 'evaluation-settings'>
+          <CustomRangeSlider />
           <CustomCheckBox active = {this.state.usage_O2} activate = {this.toggle_O2.bind(this)} caption = 'Use -O2' />
           <CustomCheckBox active = {this.state.usage_debug} activate = {this.toggle_usage_debug.bind(this)} caption = 'Use -D_GLIBCXX_DEBUG' />
           <CustomCheckBox active = {this.state.usage_debug_pedantic} activate = {this.toggle_usage_debug_pedantic.bind(this)} caption = 'Use -D_GLIBCXX_DEBUG_PEDANTIC' />

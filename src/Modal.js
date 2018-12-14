@@ -1,4 +1,5 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
+import './modalStyles.css'
 
 export default class Modal extends Component {
   constructor(prps) {
@@ -10,10 +11,10 @@ export default class Modal extends Component {
     let content = this.props.renderContent()
     let header = this.props.renderHeader()
     return (
-      <div className="modal-blur">
-        <div className="modal-core">
-          <div className="modal-header">{header}</div>
-          <div className="modal-content">{content}</div>
+      <div className='modal-blur'>
+        <div className='modal-core'>
+          <div className='modal-header'>{header}</div>
+          <div className='modal-content'>{content}</div>
         </div>
       </div>
     )

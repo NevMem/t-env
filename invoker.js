@@ -1,4 +1,5 @@
 let cp = require('child_process')
+const fs = require('fs')
 const EventEmmiter = require('events')
 require('colors')
 
@@ -32,11 +33,15 @@ let compile = () => {
 
 function evaluate(executable, input, output) {
     return new Promise((resolve, reject) => {
+        console.log('Executing')
         let startTime = process.hrtime()
-        let child = cp.spawn(executable)
+    
+        fs.writeFileSync('buffer.in', input)
+        let in_stream = fs.openSync('buffer.in', 'r')
+        let child = cp.spawn(executable, [], { stdio: [in_stream, 'pipe', 'pipe']} )
         let out = '', outerr = ''
-        child.stdin.write(input)
-        child.stdin.end()
+        // console.log(input.length)
+        // child.stdin.write(input)
         child.stdout.on('data', chunk => {
             out += chunk
         })
@@ -44,6 +49,7 @@ function evaluate(executable, input, output) {
             outerr += chunk
         })
         child.on('exit', (code, signal) => {
+            console.log('Code:', code)
             let delta = process.hrtime(startTime)
             delta = delta[0] * 1e9 + delta[1]
             delta = delta / 1e6

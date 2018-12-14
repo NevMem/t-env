@@ -322,9 +322,8 @@ export default class App extends Component {
           renderHeader={this.renderModalHeader.bind(this)}
           visible={this.state.modalVisible}
         />
-        <header>
+        <header className = {this.state.online ? 'headerOnline' : 'headerOffline'}>
           <h1>Testing environment</h1>
-          {this.state.online && <span>online</span>}
         </header>
         <div className="tests-card">
           <h2>Все тесты:</h2>
