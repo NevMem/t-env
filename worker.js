@@ -153,19 +153,33 @@ exports.addToQueue = (filename, compilationArgs, runType) => {
     }
 }
 
-exports.getTestById = (id) => {
-    for (let i = 0; i !== tests.length; ++i) {
-        if (tests[i].id === id)
-            return tests[i]
+exports.getTestIndexById = (id) => {
+    for (let index = 0; index < tests.length; ++index) {
+        if (tests[index].id === id)
+            return index
     }
     return undefined
+}
+
+exports.getTestById = (id) => {
+    let index = this.getTestIndexById(id)
+    if (index === undefined)
+        return undefined
+    return tests[index]
 }
 
 exports.getQueue = () => {
     return invokationQueue
 }
 
-// exports.addTest('6 8 4 1 0 2 2 3 ? 1 6 ? 4 6 ? 2 5 ? 2 6 ! 3 3 ? 1 6 ! 4 0 ? 1 6', '5 0 3 4 0 5', 'BASIC')
+exports.deleteTest = (info) => {
+    let index = this.getTestIndexById(info.id)
+    if (index === undefined)
+        return { error: 'test not found' }
+    // tests.splice(index, 1) // FIXME:
+    saveTests()
+    return { success: 'test was deleted' }
+}
 
 console.log('Current process pid', process.pid)
 

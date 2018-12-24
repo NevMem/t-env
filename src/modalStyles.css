@@ -1,3 +1,8 @@
+:root {
+  /* --header-color: #024eff; TODO: */
+  --header-color: rgb(40, 40, 50);
+}
+
 .modal-blur {
   position: fixed;
   top: 0px;
@@ -22,7 +27,7 @@
 }
 
 .modal-header {
-  background-color: #024eff;
+  background-color: var(--header-color);
   color: white;
   padding-left: 20px;
   padding-right: 20px;

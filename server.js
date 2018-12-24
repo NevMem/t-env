@@ -93,6 +93,12 @@ io.on('connection', socket => {
         onlineChanges.emit('new record', worker.getQueue().length - 1)
     })
 
+    socket.on('delete test', (msg) => {
+        console.log('Request for removing test', msg)
+        let info = worker.deleteTest({ id: msg.testId })
+        socket.emit('info', info)
+    })
+
     socket.on('disconnect', () => {
         console.log('disconnected one')
         let index = connections.indexOf(socket)

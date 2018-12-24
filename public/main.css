@@ -6,9 +6,14 @@
 }
 
 :root {
-  /* --background-color: rgb(23, 4, 37);    */
-  background-color: #f3f5fa;
-  background-color: #f0f1f5;
+  --background-color: #f0f1f5;
+  --button-danger-color: rgb(255, 116, 36);
+  --evaluate-button-background-color: #2e2d4d; /* rgba(60, 60, 180, .9); */
+  --evaluate-button-border-color: #2e2d4d; /* rgba(60, 60, 180, .9); */
+  --evaluate-button-box-shadow-color: #2e2d4d; /* rgba(60, 60, 180, .9) */;
+  --evaluate-button-font-color: white;
+  --evaluate-button-background-hover-color: #2e2d4d; /* rgba(60, 60, 180, .9) */;
+  --evaluate-button-font-hover-color: white;
 }
 
 html {
@@ -99,37 +104,32 @@ header span {
 .evaluate-button {
   padding-right: 20px;
   padding-left: 20px;
-  border: 2px solid magenta;
-  background-color: magenta;
-  color: white;
+  border: 1px solid var(--evaluate-button-border-color);
+  background-color: var(--evaluate-button-background-color);
+  color: var(--evaluate-button-font-color);
   cursor: pointer;
-  box-shadow: 0px 3px 6px rgba(161, 65, 161, 0.212);
   font-size: 40px;
-  transition: all ease-in .2s;
+  transition: all ease-out .2s;
+  border-radius: 2px;
 }
 
 .evaluate-button:hover {
-  box-shadow: 0px 3px 6px rgba(161, 65, 161, 0.712);
-}
-
-.evaluate-button:hover {
-
+  box-shadow: 0px 3px 6px var(--evaluate-button-box-shadow-color);
+  background-color: var(--evaluate-button-background-hover-color);
+  color: var(--evaluate-button-font-hover-color);
 }
 
 .tests-card h2 {
   line-height: 60px;
-  /* border-bottom: 2px solid rgba(100, 102, 107, 0.125); */
   padding-left: 20px;
   font-weight: 300;
   color: rgb(134, 134, 134);
   border-bottom: 1px solid #02bdd6;
-  /* color: #02bdd6; */
 }
 
 .tests {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  /* grid-gap: 10px; */
 }
 
 .test {
@@ -138,12 +138,7 @@ header span {
   line-height: 80px;
   padding-left: 20px;
   padding-right: 20px;
-  /* border-right: 1px solid #02bdd6; */
-  /* border-bottom: 1px solid #02bdd6; */
-
   transition: all ease-in 0.2s;
-  /* box-shadow: 0px 3px 6px rgba(100, 102, 107, 0.025); */
-  /* border: 1px solid rgba(100, 102, 107, 0.15); */
   text-align: center;
   font-size: 22px;
 
@@ -156,7 +151,6 @@ header span {
 }
 
 .test:hover {
-  /* box-shadow: 0px 0px 10px rgba(100, 102, 107, 0.250); */
   background-color: #02bdd6;
   color: white;
   transform: scale(1.05);
@@ -244,9 +238,10 @@ header span {
 
 .testModeration {
   display: grid;
-  grid-template-rows: 70px 400px;
+  grid-template-rows: 70px 300px 70px;
   grid-template-columns: 1fr 1fr;
   grid-gap: 10px;
+  padding-bottom: 20px;
 }
 
 .testModeration :first-child {
@@ -322,6 +317,15 @@ header span {
   background-color: #024eff;
 }
 
+.btn-danger {
+  border-color: var(--button-danger-color);
+  color: var(--button-danger-color);
+}
+
+.btn-danger:hover {
+  background-color: var(--button-danger-color);
+}
+
 .testCreationButtonDiv {
   padding-top: 10px;
   padding-bottom: 10px;
@@ -355,4 +359,14 @@ header span {
   padding-top: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.centered {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;  
+}
+
+.fill-2-column {
+  grid-column: 1 / 3;
 }

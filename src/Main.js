@@ -3,8 +3,8 @@ import openSocket from 'socket.io-client'
 import update from 'react-addons-update'
 import Modal from './Modal'
 import CreateTestForm from './components/CreateTestForm'
-import CustomCheckBox from './components/CustomCheckBox';
-import EvaluationCard from './components/EvaluationCard';
+import EvaluationCard from './components/EvaluationCard'
+import Notifications from './components/Notifications';
 
 export default class App extends Component {
   constructor(prps) {
@@ -25,10 +25,13 @@ export default class App extends Component {
 
       modalMode: 'none',
 
-      newTestName: ''
+      newTestName: '',
+
+      notifications: []
     }
     this.state.socket.on('connect', () => {
       console.log('connected')
+      this.addNotification({ type: 'success', msg: 'connected to server', heading: 'client' })
       this.setState({ online: true, tests: [], queue: [] })
     })
     this.state.socket.on('new test', test => {
@@ -90,6 +93,9 @@ export default class App extends Component {
         }),
       })
     })
+    this.state.socket.on('info', msg => {
+      this.addNotification(msg)
+    })
     this.state.socket.on('change status', status => {
       console.log(status)
       this.setState({
@@ -104,7 +110,14 @@ export default class App extends Component {
     })
     this.state.socket.on('disconnect', () => {
       console.log('disconnected')
+      this.addNotification({ type: 'error', msg: 'disconnected to server', heading: 'client' })
       this.setState({ online: false, tests: [], queue: [] })
+    })
+  }
+
+  addNotification(notification) {
+    this.setState({
+      notifications: [ ...this.state.notifications, notification ]
     })
   }
 
@@ -119,6 +132,13 @@ export default class App extends Component {
     } else {
       this.state.socket.emit('evaluate')
     }
+  }
+
+  deleteTest(event) {
+    event.preventDefault()
+    this.state.socket.emit('delete test', {
+      testId: this.state.tests[this.state.testIndex].id
+    })
   }
 
   renderModalContent() {
@@ -225,6 +245,11 @@ export default class App extends Component {
               {answer}
             </div>
           </div>
+          <div className = 'centered fill-2-column'>
+            <div onClick = {this.deleteTest.bind(this)} className = 'btn btn-danger'>
+              DELETE TEST
+            </div>
+          </div>
         </div>
       )
     }
@@ -313,6 +338,15 @@ export default class App extends Component {
     this.showModal()
   }
 
+  removeNotification(index, event) {
+    event.preventDefault()
+    let newNotifications = [...this.state.notifications]
+    newNotifications.splice(this.state.notifications.length - 1 - index, 1)
+    this.setState({
+      notifications: newNotifications
+    })
+  }
+
   render() {
     return (
       <div className="wrapper">
@@ -322,6 +356,7 @@ export default class App extends Component {
           renderHeader={this.renderModalHeader.bind(this)}
           visible={this.state.modalVisible}
         />
+        <Notifications delete = {this.removeNotification.bind(this)} maxCount = {7} notifications = {this.state.notifications} />
         <header className = {this.state.online ? 'headerOnline' : 'headerOffline'}>
           <h1>Testing environment</h1>
         </header>

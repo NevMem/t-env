@@ -41,5 +41,8 @@
     "webpack": "^4.21.0",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.9"
+  }, 
+  "nodemonConfig": {
+    "ignore": [ "tests.json", "src/*", "public/*", "src/**" ]
   }
 }
