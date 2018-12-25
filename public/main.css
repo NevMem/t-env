@@ -359,6 +359,8 @@ header span {
   padding-top: 20px;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-column-gap: 20px;
+  grid-row-gap: 15px;
 }
 
 .centered {
