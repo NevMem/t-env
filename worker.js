@@ -139,7 +139,7 @@ exports.addToQueue = (filename, compilationArgs, timeLimit, runType) => {
             compilationArgs: compilationArgs,
             filename: filename,
             policy: runType,
-            timeLimit: timeLimit,
+            timelimit: timeLimit,
             feedback: [],
             status: 'waiting'
         }
@@ -147,6 +147,7 @@ exports.addToQueue = (filename, compilationArgs, timeLimit, runType) => {
             newRecord.feedback.push({ testId: tests[i].id, status: 'waiting', stdout: '', stderr: '', exitCode: undefined, time: undefined })
         }
         invokationQueue.push(newRecord)
+        console.log(invokationQueue)
         console.log('New record was successfully added to invokation queue'.green)
         invokationLoop.emit('new item')
     } else {

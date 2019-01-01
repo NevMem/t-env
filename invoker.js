@@ -188,7 +188,7 @@ process.on('message', msg => {
             filename = msg.filename
             policy = msg.policy
             compilationArgs = msg.compilationArgs
-            timeLimit = msg.timeLimit
+            timelimit = msg.timelimit
             if (compilationArgs.length == 1 && compilationArgs[0].length == 0)
                 compilationArgs = []
 

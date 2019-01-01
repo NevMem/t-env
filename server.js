@@ -92,7 +92,7 @@ io.on('connection', socket => {
         let runType = 'single'
         if (settings.runType === 'parallel')
             runType = 'parallel'
-        worker.addToQueue('D:\\memlo\\workspace\\prepare\\src\\contest.cpp', compilationArgs, settings.timeLimit, runType)
+        worker.addToQueue('D:\\memlo\\workspace\\prepare\\src\\contest.cpp', compilationArgs, settings.timelimit, runType)
         onlineChanges.emit('new record', worker.getQueue().length - 1)
     })
 
