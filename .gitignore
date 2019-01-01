@@ -4,3 +4,5 @@ views/*
 dist/*
 *.json
 .prettierrc
+buffer.in
+buffer.out

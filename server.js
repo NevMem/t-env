@@ -87,9 +87,12 @@ io.on('connection', socket => {
         onlineChanges.emit('test added', info)
     })
 
-    socket.on('evaluate', () => {
-        console.log('We are here')
-        worker.addToQueue('D:\\memlo\\workspace\\prepare\\src\\contest.cpp', '-O2', 'single')
+    socket.on('evaluate', settings => {
+        let compilationArgs = prepareCompilationArgs(settings)
+        let runType = 'single'
+        if (settings.runType === 'parallel')
+            runType = 'parallel'
+        worker.addToQueue('D:\\memlo\\workspace\\prepare\\src\\contest.cpp', compilationArgs, settings.timeLimit, runType)
         onlineChanges.emit('new record', worker.getQueue().length - 1)
     })
 
@@ -107,6 +110,17 @@ io.on('connection', socket => {
         connections.splice(index, 1)
     })
 })
+
+let prepareCompilationArgs = (settings) => {
+    let args = []
+    if (settings.using_O2 === true)
+        args.push('-O2')
+    if (settings.using_glibcxx_debug === true)
+        args.push('-D_GLIBCXX_DEBUG')
+    if (settings.using_glibcxx_debug_pedantic === true)
+        args.push('-D_GLIBCXX_DEBUG_PEDANTIC')
+    return args
+}
 
 let sendAll = (type, message) => {
     for (let client of connections) {

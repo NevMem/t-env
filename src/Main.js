@@ -4,7 +4,7 @@ import update from 'react-addons-update'
 import Modal from './Modal'
 import CreateTestForm from './components/CreateTestForm'
 import EvaluationCard from './components/EvaluationCard'
-import Notifications from './components/Notifications';
+import Notifications from './components/Notifications'
 
 export default class App extends Component {
   constructor(prps) {
@@ -110,7 +110,7 @@ export default class App extends Component {
     })
     this.state.socket.on('disconnect', () => {
       console.log('disconnected')
-      this.addNotification({ type: 'error', msg: 'disconnected to server', heading: 'client' })
+      this.addNotification({ type: 'error', msg: 'disconnected from server', heading: 'client' })
       this.setState({ online: false, tests: [], queue: [] })
     })
   }
@@ -127,10 +127,15 @@ export default class App extends Component {
     })
   }
 
-  evaluate() {
+  evaluate(settings) {
     if (!this.state.socket) {
+      addNotification({
+        type: 'error',
+        msg: 'You\'re disconnected',
+        heading: 'Connection problems'
+      })
     } else {
-      this.state.socket.emit('evaluate')
+      this.state.socket.emit('evaluate', settings)
     }
   }
 
@@ -373,7 +378,7 @@ export default class App extends Component {
             <div onClick = {this.addTest.bind(this)} className="test add-test">+Add</div>
           </div>
         </div>
-        <EvaluationCard evaluate = {this.evaluate.bind(this)} />
+        <EvaluationCard notify = {this.addNotification.bind(this)} evaluate = {this.evaluate.bind(this)} />
         <div className="queue-card">
           <div className="queue">
             <div className="record rhead">

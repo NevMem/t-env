@@ -187,7 +187,8 @@ process.on('message', msg => {
             tests = msg.tests
             filename = msg.filename
             policy = msg.policy
-            compilationArgs = msg.compilationArgs.split()
+            compilationArgs = msg.compilationArgs
+            timeLimit = msg.timeLimit
             if (compilationArgs.length == 1 && compilationArgs[0].length == 0)
                 compilationArgs = []
 

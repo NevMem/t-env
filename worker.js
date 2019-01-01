@@ -133,12 +133,13 @@ exports.addTest = (input, output, testName) => {
     }
 }
 
-exports.addToQueue = (filename, compilationArgs, runType) => {
+exports.addToQueue = (filename, compilationArgs, timeLimit, runType) => {
     if (runType === 'parallel' || runType === 'single') {
         let newRecord = {
             compilationArgs: compilationArgs,
             filename: filename,
-            policy: runType, 
+            policy: runType,
+            timeLimit: timeLimit,
             feedback: [],
             status: 'waiting'
         }
@@ -174,11 +175,12 @@ exports.getQueue = () => {
 
 exports.deleteTest = (info) => {
     let index = this.getTestIndexById(info.id)
+    console.log(index)
     if (index === undefined)
-        return { error: 'test not found' }
-    // tests.splice(index, 1) // FIXME:
+        return { type: 'error', msg: 'test not found', heading: 'test removing' }
+    tests.splice(index, 1)
     saveTests()
-    return { success: 'test was deleted' }
+    return { type: 'success', msg: 'test was deleted', heading: 'test removing' }
 }
 
 console.log('Current process pid', process.pid)

@@ -28,7 +28,7 @@ export default class CustomRangeSlider extends Component {
     event.stopPropagation()
     let rect = this.slider.getClientRects()[0]
     let workWidth = rect.width - 36
-    let currentMove = event.clientX - rect.x - 11;
+    let currentMove = event.clientX - rect.x - 11
     if (currentMove < 0)
       currentMove = 0
     if (currentMove > workWidth)
