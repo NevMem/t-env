@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
 import './customrangeslider.css'
+import PropTypes from 'prop-types'
 
 export default class CustomRangeSlider extends Component {
   constructor(prps) {
     super(prps)
-    this.state = {
-      min: 0,
-      max: 1000, 
-      current: 0
-    }
+    console.log(this.props)
   }
 
   getLeft = () => {
-    let left = (this.state.current - this.state.min) / (this.state.max - this.state.min)
-    left = 'calc(11px + (100% - 36px) / ' + (this.state.max - this.state.min)  + ' * ' +  (this.state.current - this.state.min) + ')'
+    let left = (this.props.current - this.props.min) / (this.props.max - this.props.min)
+    left = 'calc(11px + (100% - 36px) / ' + (this.props.max - this.props.min)  + ' * ' +  (this.props.current - this.props.min) + ')'
     return left
   }
 
@@ -21,6 +18,10 @@ export default class CustomRangeSlider extends Component {
     event.preventDefault()
     document.addEventListener('mousemove', this.mouseMove)
     document.addEventListener('mouseup', this.mouseUp)
+  }
+
+  changeCurrentValue = (currentValue) => {
+    this.props.handleChange(currentValue)
   }
 
   mouseMove = (event) => {
@@ -32,9 +33,7 @@ export default class CustomRangeSlider extends Component {
       currentMove = 0
     if (currentMove > workWidth)
       currentMove = workWidth
-    this.setState({
-      current: this.state.min + ((this.state.max - this.state.min) * currentMove / workWidth | 0)
-    })
+    this.changeCurrentValue(this.props.min + ((this.props.max - this.props.min) * currentMove / workWidth | 0))
   }
 
   mouseUp = () => {
@@ -48,13 +47,13 @@ export default class CustomRangeSlider extends Component {
       <div className = 'range-slider-box'>
         <div className = 'range-slider-heading'>
           <div className = 'range-slider-min-value'>
-            {this.state.min}
+            {this.props.min}
           </div>
           <div className = 'range-slider-current-value'>
-            {this.state.current}
+            {this.props.current}
           </div>
           <div className = 'range-slider-max-value'>
-            {this.state.max}
+            {this.props.max}
           </div>
         </div>
         <div ref = {rf => this.slider = rf } className='slider'>
@@ -68,4 +67,11 @@ export default class CustomRangeSlider extends Component {
       </div>
     )
   }
+}
+
+CustomRangeSlider.propTypes = {
+  min: PropTypes.number.isRequired,
+  max: PropTypes.number.isRequired,
+  current: PropTypes.number.isRequired,
+  handleChange: PropTypes.func.isRequired
 }

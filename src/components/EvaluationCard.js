@@ -11,7 +11,8 @@ export default class EvaluationCard extends Component {
       usage_debug: false,
       usage_debug_pedantic: false,
       runType: 'single',
-      runTypeToggled: false
+      runTypeToggled: false,
+      timelimit: 1500
     }
   }
 
@@ -43,11 +44,17 @@ export default class EvaluationCard extends Component {
     })
   }
 
+  handleTimeLimitChange(value) {
+    this.setState({
+      timelimit: value
+    })
+  }
+
   render() {
     return (
       <div className = 'evaluation-card'>
         <div className = 'evaluation-settings'>
-          <CustomRangeSlider />
+          <CustomRangeSlider min = {200} max = {5000} current = {this.state.timelimit} handleChange = {this.handleTimeLimitChange.bind(this)} />
           <CustomCheckBox active = {this.state.usage_O2} activate = {this.toggle_O2.bind(this)} caption = 'Use -O2' />
           <CustomCheckBox active = {this.state.usage_debug} activate = {this.toggle_usage_debug.bind(this)} caption = 'Use -D_GLIBCXX_DEBUG' />
           <CustomCheckBox active = {this.state.usage_debug_pedantic} activate = {this.toggle_usage_debug_pedantic.bind(this)} caption = 'Use -D_GLIBCXX_DEBUG_PEDANTIC' />
