@@ -6,6 +6,7 @@ require('colors')
 let tests = undefined
 let filename = undefined
 let policy = undefined
+let timelimit = undefined
 let compilationArgs = undefined
 
 let runLoop = new EventEmmiter()
@@ -40,8 +41,12 @@ function evaluate(executable, input, output) {
         let in_stream = fs.openSync('buffer.in', 'r')
         let child = cp.spawn(executable, [], { stdio: [in_stream, 'pipe', 'pipe']} )
         let out = '', outerr = ''
-        // console.log(input.length)
-        // child.stdin.write(input)
+        let TL_OCURED = false
+        console.log('Time limit:', timelimit)
+        let destroyer = setTimeout(() => {
+            TL_OCURED = true
+            child.kill()
+        }, timelimit)
         child.stdout.on('data', chunk => {
             out += chunk
         })
@@ -49,10 +54,21 @@ function evaluate(executable, input, output) {
             outerr += chunk
         })
         child.on('exit', (code, signal) => {
-            console.log('Code:', code)
+            clearTimeout(destroyer)
+            console.log('Exit code:', code)
             let delta = process.hrtime(startTime)
             delta = delta[0] * 1e9 + delta[1]
             delta = delta / 1e6
+            if (TL_OCURED) {
+                console.log('Time limit exceeded'.blue)
+                reject({
+                    stdout: out,
+                    stderr: outerr,
+                    exitCode: code,
+                    time: delta,
+                    timelimit: true
+                })
+            }
             if (code === 0) {
                 resolve({
                     stdout: out,
@@ -99,7 +115,7 @@ async function run(executable) {
             time: undefined
         })
     }
-    if (policy === 'parallel') {
+    if (policy === 'parallel') { // FIXME:
         policy = 'single'
         process.send({
             type: 'message',
@@ -129,7 +145,9 @@ async function run(executable) {
             feedback[i].stdout = evaluationStatus.stdout
             feedback[i].stderr = evaluationStatus.stderr
             feedback[i].time = evaluationStatus.time
-            if (evaluationStatus.exitCode === 0) {
+            if (evaluationStatus.timelimit === true) {
+                feedback[i].status = 'time limit exceeded'
+            } else if (evaluationStatus.exitCode === 0) {
                 let expected = cut(tests[i].output)
                 let found = cut(feedback[i].stdout)
                 if (found.length != expected.length) {

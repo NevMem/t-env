@@ -54,7 +54,8 @@ invokationLoop.on('run', () => {
         policy: now.policy,
         compilationArgs: now.compilationArgs,
         filename: now.filename,
-        tests: tests
+        tests: tests,
+        timelimit: now.timelimit
     })
     invoker.on('message', message => {
         if (message.type === 'feedback') {
