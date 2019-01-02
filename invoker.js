@@ -24,7 +24,8 @@ let compile = () => {
         let child = cp.spawnSync('g++', compilationArgs)
         if (child.status == 0) {
             resolve({
-                executableName: executableName
+                executableName: executableName,
+                compilation_out: child.stderr.toString()
             })   
         } else {
             reject(child.stderr.toString())
@@ -188,14 +189,22 @@ async function run(executable) {
 
 let startInvokation = () => {
     compile().then(info => {
+        console.log(info)
         process.send({
             type: 'change status',
-            status: 'compiled'
+            status: 'compiled',
+            compilation_out: info.compilation_out
         })
         run(info.executableName)
     }).catch(err => {
         console.log('Compilation error'.red)
         console.log(err)
+        process.send({
+            type: 'change status',
+            status: 'compilation error',
+            compilation_out: err
+        })
+        process.exit(0)
     })
 }
 
