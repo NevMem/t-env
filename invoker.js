@@ -192,7 +192,10 @@ let startInvokation = () => {
         console.log(info)
         process.send({
             type: 'change status',
-            status: 'compiled',
+            status: 'compiled'
+        })
+        process.send({
+            type: 'change compilation out',
             compilation_out: info.compilation_out
         })
         run(info.executableName)
@@ -201,7 +204,10 @@ let startInvokation = () => {
         console.log(err)
         process.send({
             type: 'change status',
-            status: 'compilation error',
+            status: 'compilation error'
+        })
+        process.send({
+            type: 'change compilation out',
             compilation_out: err
         })
         process.exit(0)

@@ -140,6 +140,10 @@ onlineChanges.on('change status', (message) => {
     }
 })
 
+onlineChanges.on('change compilation out', msg => {
+    sendAll('change compilation out', msg)
+})
+
 onlineChanges.on('new record', (index) => {
     sendAll('new record', worker.getQueue()[index])
 })

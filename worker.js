@@ -64,19 +64,25 @@ invokationLoop.on('run', () => {
             invokationQueue[currentIndex].feedback[message.test_id].stderr = message.feedback.stderr
             invokationQueue[currentIndex].feedback[message.test_id].exitCode = message.feedback.exitCode
             invokationQueue[currentIndex].feedback[message.test_id].status = message.feedback.status
+            emitOnline('change feedback', {
+                queueIndex: currentIndex, 
+                feedback: invokationQueue[currentIndex].feedback
+            })
         } else if (message.type === 'change status') {
             invokationQueue[currentIndex].status = message.status
             emitOnline('change status', {
                 queueIndex: currentIndex, 
                 status: invokationQueue[currentIndex].status
             })
+        } else if (message.type === 'change compilation out') {
+            invokationQueue[currentIndex].compilation_out = message.compilation_out
+            emitOnline('change compilation out', {
+                queueIndex: currentIndex,
+                compilation_out: message.compilation_out
+            })
         } else {
             console.log(('Unknown message type: ' + message.type).red)
         }
-        emitOnline('change feedback', {
-            queueIndex: currentIndex, 
-            feedback: invokationQueue[currentIndex].feedback
-        })
     })
     invoker.on('exit', (code, signal) => {
         console.log(`Invoker exited with code: ${code} signal: ${signal}`.magenta)

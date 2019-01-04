@@ -111,6 +111,21 @@ export default class App extends Component {
         }),
       })
     })
+    this.state.socket.on('change compilation out', msg => {
+      let index = msg.queueIndex
+      let out = msg.compilation_out
+      if (index >= 0 && index < this.state.queue.length) {
+        this.setState({
+          queue: update(this.state.queue, {
+            [this.state.queue.length - 1 - index]: {
+              $merge: {
+                compilation_out: out,
+              },
+            },
+          }),
+        })
+      }
+    })
     this.state.socket.on('disconnect', () => {
       // console.log('disconnected')
       this.addNotification({
