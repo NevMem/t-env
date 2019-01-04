@@ -149,6 +149,7 @@ export default class EvaluationCard extends Component {
           <CustomRangeSlider
             min={200}
             max={5000}
+            roundingTo={50}
             current={this.state.timelimit}
             handleChange={this.handleTimeLimitChange.bind(this)}
           />
