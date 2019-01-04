@@ -29,7 +29,7 @@ export default class App extends Component {
       notifications: [],
     }
     this.state.socket.on('connect', () => {
-      console.log('connected')
+      // console.log('connected')
       this.addNotification({
         type: 'success',
         msg: 'connected to server',
@@ -41,7 +41,7 @@ export default class App extends Component {
       this.setState({ tests: [...this.state.tests, test] })
     })
     this.state.socket.on('new record', record => {
-      console.log(record)
+      // console.log(record)
       record.expanded = false
       this.setState({ queue: [record, ...this.state.queue] })
     })
@@ -100,7 +100,7 @@ export default class App extends Component {
       this.addNotification(msg)
     })
     this.state.socket.on('change status', status => {
-      console.log(status)
+      // console.log(status)
       this.setState({
         queue: update(this.state.queue, {
           [this.state.queue.length - 1 - status.queueIndex]: {
@@ -112,7 +112,7 @@ export default class App extends Component {
       })
     })
     this.state.socket.on('disconnect', () => {
-      console.log('disconnected')
+      // console.log('disconnected')
       this.addNotification({
         type: 'error',
         msg: 'disconnected from server',

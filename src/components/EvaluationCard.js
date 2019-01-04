@@ -18,21 +18,70 @@ export default class EvaluationCard extends Component {
     }
   }
 
+  componentDidMount() {
+    this.loadSettings()
+  }
+
+  __load_boolean_field(field_name) {
+    if (localStorage.getItem(field_name) === 'true' || localStorage.getItem(field_name) === 'false')
+      this.setState({ [field_name]: localStorage.getItem(field_name) === 'true' })
+  }
+
+  __load_number_field(field_name, bounds) {
+    let value = localStorage.getItem(field_name)
+    if (value === undefined)
+      return
+    value = parseInt(value, 10)
+    if (bounds && bounds[0] <= value && value <= bounds[1])
+      return
+    this.setState({ [field_name]: value })
+  }
+
+  __load_string_field(field_name) {
+    if (localStorage.getItem(field_name) !== undefined)
+      this.setState({ [field_name]: localStorage.getItem(field_name) })
+  }
+
+  loadSettings() {
+    this.__load_boolean_field('using_O2')
+    this.__load_boolean_field('using_glibcxx_debug')
+    this.__load_boolean_field('using_glibcxx_debug_pedantic')
+    this.__load_boolean_field('runTypeToggled')
+    this.__load_string_field('runType')
+    this.__load_number_field('timelimit', [ this.state.min, this.state.max ])
+  }
+
+  saveSettings() {
+    localStorage.setItem('using_O2', this.state.using_O2)
+    localStorage.setItem('runType', this.state.runType)
+    localStorage.setItem('runTypeToggled', this.state.runTypeToggled)
+    localStorage.setItem('using_glibcxx_debug_pedantic', this.state.using_glibcxx_debug_pedantic)
+    localStorage.setItem('using_glibcxx_debug', this.state.using_glibcxx_debug)
+    localStorage.setItem('timelimit', this.state.timelimit)
+  }
+
   toggle_O2() {
     this.setState({
       using_O2: !this.state.using_O2
+    }, () => {
+      this.saveSettings()
     })
   }
 
   toggle_using_debug() {
+    console.log('Hello')
     this.setState({
-      using_glibcxx_debug: !this.state.using_glibcxx__debug
+      using_glibcxx_debug: !this.state.using_glibcxx_debug
+    }, () => {
+      this.saveSettings()
     })
   }
 
   toggle_using_debug_pedantic() {
     this.setState({
       using_glibcxx_debug_pedantic: !this.state.using_glibcxx_debug_pedantic
+    }, () => {
+      this.saveSettings()
     })
   }
 
@@ -43,12 +92,16 @@ export default class EvaluationCard extends Component {
     this.setState({
       runType: newRunType,
       runTypeToggled: (newRunType === 'parallel')
+    }, () => {
+      this.saveSettings()
     })
   }
 
   handleTimeLimitChange(value) {
     this.setState({
       timelimit: value
+    }, () => {
+      this.saveSettings()
     })
   }
 

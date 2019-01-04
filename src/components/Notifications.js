@@ -6,8 +6,6 @@ const default_mx = 10
 export default class Notifications extends Component {
   constructor(prps) {
     super(prps)
-    console.log('Hello from Notifications constructor')
-    console.log(this.props.notifications)
   }
 
   render() {

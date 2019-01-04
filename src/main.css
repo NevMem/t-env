@@ -79,6 +79,7 @@ header span {
   font-weight: 300;
   color: rgb(134, 134, 134);
   border-bottom: 1px solid var(--tests-card-maincolor);
+  /* color: var(--tests-card-maincolor); */
 }
 
 .tests {
