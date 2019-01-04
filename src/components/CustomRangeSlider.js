@@ -80,5 +80,6 @@ CustomRangeSlider.propTypes = {
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
   current: PropTypes.number.isRequired,
-  handleChange: PropTypes.func.isRequired
+  handleChange: PropTypes.func.isRequired,
+  roundingTo: PropTypes.number
 }
