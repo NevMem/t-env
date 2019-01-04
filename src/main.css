@@ -119,7 +119,7 @@ header span {
 
 .record {
   display: grid;
-  grid-template-columns: auto 200px 100px;
+  grid-template-columns: auto 200px 100px 100px;
   line-height: 40px;
   background-color: white;
   padding-top: 4px;
@@ -172,9 +172,16 @@ header span {
   padding-bottom: 10px;
   padding-left: 20px;
   padding-right: 20px;
+  line-height: 2em;
+  font-size: 1.3em;
 }
 
 .compilation-info {
+  display: flex;
+  flex-direction: row;
+}
+
+.ok-count {
   display: flex;
   flex-direction: row;
 }

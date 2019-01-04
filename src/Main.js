@@ -409,11 +409,19 @@ export default class App extends Component {
         <div className='queue-card'>
           <div className='queue'>
             <div className='record rhead'>
-              <div>Название файла</div>
-              <div>Статус</div>
+              <div>File name</div>
+              <div>Result</div>
+              <div>Status</div>
               <div>Policy</div>
             </div>
             {this.state.queue.map((el, index) => {
+              let fullCount = el.feedback.length
+              let okCount = 0
+              for (let i = 0; i !== el.feedback.length; ++i) {
+                if (el.feedback[i].status === 'ok') {
+                  okCount += 1
+                }
+              }
               if (!el.expanded) {
                 return (
                   <div key={index} className='record-box'>
@@ -422,19 +430,14 @@ export default class App extends Component {
                       onClick={this.expandRecord.bind(this, index)}
                     >
                       <div>{el.filename}</div>
+                      <div>{okCount}/{fullCount}</div>
                       <div>{el.status}</div>
                       <div>{el.policy}</div>
                     </div>
                   </div>
                 )
               } else {
-                let fullCount = el.feedback.length
-                let okCount = 0
-                for (let i = 0; i !== el.feedback.length; ++i) {
-                  if (el.feedback[i].status === 'ok') {
-                    okCount += 1
-                  }
-                }
+                console.log(el.compilation_out)
                 return (
                   <div key={index} className='record-box'>
                     <div
@@ -442,6 +445,7 @@ export default class App extends Component {
                       onClick={this.expandRecord.bind(this, index)}
                     >
                       <div>{el.filename}</div>
+                      <div>{okCount}/{fullCount}</div>
                       <div>{el.status}</div>
                       <div>{el.policy}</div>
                     </div>
@@ -452,6 +456,7 @@ export default class App extends Component {
                           <div>{JSON.stringify(el.compilationArgs)}</div>
                         </div>
                         <div className = 'ok-count'>
+                          <div>Result:</div>
                           <div>{okCount} / {fullCount}</div>
                         </div>
                       </div>
