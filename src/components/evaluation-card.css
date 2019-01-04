@@ -1,0 +1,48 @@
+:root {
+  --evaluate-button-background-color: #2e2d4d; /* rgba(60, 60, 180, .9); */
+  --evaluate-button-border-color: #2e2d4d; /* rgba(60, 60, 180, .9); */
+  --evaluate-button-box-shadow-color: #2e2d4d86; /* rgba(60, 60, 180, .9) */
+  --evaluate-button-font-color: white;
+  --evaluate-button-background-hover-color: #2e2d4d; /* rgba(60, 60, 180, .9) */
+  --evaluate-button-font-hover-color: white;
+}
+
+.evaluation-card {
+  grid-row: 4;
+  background-color: #ffffff;
+  box-shadow: 0px 3px 6px rgb(182, 183, 185, 0.9);
+
+  display: grid;
+  grid-template-rows: 100px auto;
+}
+
+.evaluateButtonDiv {
+  display: flex;
+  flex-direction: row;
+  grid-row: 2;
+  justify-content: space-around;
+  width: 100%;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.evaluate-button {
+  padding-right: 40px;
+  padding-left: 40px;
+  /* border: 1px solid var(--evaluate-button-border-color); */
+  /* background-color: var(--evaluate-button-background-color); */
+  background: linear-gradient(to top right, rgb(119, 0, 255), rgb(194, 0, 255));
+  color: var(--evaluate-button-font-color);
+  cursor: pointer;
+  font-size: 40px;
+  transition: all ease-out 0.4s;
+  border-radius: 3px;
+  /* box-shadow: 0px 3px 2px var(--evaluate-button-box-shadow-color); */
+}
+
+.evaluate-button:hover {
+  box-shadow: 0px 3px 10px var(--evaluate-button-box-shadow-color);
+  /* background-color: var(--evaluate-button-background-hover-color); */
+  border: none;
+  color: var(--evaluate-button-font-hover-color);
+}

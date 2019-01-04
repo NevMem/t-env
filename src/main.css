@@ -8,12 +8,7 @@
 :root {
   --background-color: #f0f1f5;
   --button-danger-color: rgb(255, 116, 36);
-  --evaluate-button-background-color: #2e2d4d; /* rgba(60, 60, 180, .9); */
-  --evaluate-button-border-color: #2e2d4d; /* rgba(60, 60, 180, .9); */
-  --evaluate-button-box-shadow-color: #2e2d4d; /* rgba(60, 60, 180, .9) */;
-  --evaluate-button-font-color: white;
-  --evaluate-button-background-hover-color: #2e2d4d; /* rgba(60, 60, 180, .9) */;
-  --evaluate-button-font-hover-color: white;
+  --background-color-test-info-hover: #ff1c8613;
 }
 
 html {
@@ -43,7 +38,7 @@ header {
   flex-direction: row;
   justify-content: space-between;
   color: white;
-  box-shadow: 0px 3px 6px rgb(182, 183, 185, 0.4);
+  box-shadow: 0px 3px 6px rgb(182, 183, 185, 0.9);
 }
 
 header h1 {
@@ -68,55 +63,14 @@ header span {
   color: #024eff;
 }
 
-.card {
-  /* grid-column: 3 / 15; */
-}
-
-.queue {
+:root {
+  --tests-card-maincolor: #ff4a1c; /* #02bdd6 */
 }
 
 .tests-card {
   grid-row: 3;
-  /* grid-column: 3 / 15; */
   background-color: #ffffff;
-  box-shadow: 0px 3px 6px rgb(182, 183, 185, 0.4);
-}
-
-.evaluation-card {
-  grid-row: 4;
-  background-color: #ffffff;
-  box-shadow: 0px 3px 6px rgb(182, 183, 185, 0.4);
-
-  display: grid;
-  grid-template-rows: 100px auto;
-}
-
-.evaluateButtonDiv {
-  display: flex;
-  flex-direction: row;
-  grid-row: 2;
-  justify-content: space-around;
-  width: 100%;
-  padding-top: 30px;
-  padding-bottom: 30px;
-}
-
-.evaluate-button {
-  padding-right: 20px;
-  padding-left: 20px;
-  border: 1px solid var(--evaluate-button-border-color);
-  background-color: var(--evaluate-button-background-color);
-  color: var(--evaluate-button-font-color);
-  cursor: pointer;
-  font-size: 40px;
-  transition: all ease-out .2s;
-  border-radius: 2px;
-}
-
-.evaluate-button:hover {
-  box-shadow: 0px 3px 6px var(--evaluate-button-box-shadow-color);
-  background-color: var(--evaluate-button-background-hover-color);
-  color: var(--evaluate-button-font-hover-color);
+  box-shadow: 0px 3px 6px rgb(182, 183, 185, 0.9);
 }
 
 .tests-card h2 {
@@ -124,41 +78,42 @@ header span {
   padding-left: 20px;
   font-weight: 300;
   color: rgb(134, 134, 134);
-  border-bottom: 1px solid #02bdd6;
+  border-bottom: 1px solid var(--tests-card-maincolor);
 }
 
 .tests {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
 
 .test {
   color: rgb(100, 102, 107);
   cursor: pointer;
-  line-height: 80px;
+  line-height: 50px;
   padding-left: 20px;
   padding-right: 20px;
   transition: all ease-in 0.2s;
   text-align: center;
   font-size: 22px;
 
-  color: #02bdd6;
+  color: var(--tests-card-maincolor);
 }
 
 .add-test {
-  background-color: #02bdd6;
+  background-color: var(--tests-card-maincolor);
   color: white;
 }
 
 .test:hover {
-  background-color: #02bdd6;
+  background-color: var(--tests-card-maincolor);
   color: white;
   transform: scale(1.05);
 }
 
 .queue-card {
   grid-row: 5;
-  box-shadow: 0px 3px 6px rgb(182, 183, 185, 0.4);
+  box-shadow: 0px 3px 6px rgb(182, 183, 185, 0.9);
+  margin-bottom: 20px;
 }
 
 .record {
@@ -174,7 +129,7 @@ header span {
 }
 
 .record:hover {
-  background-color: #02bdd61e;
+  background-color: #cacaca1e;
 }
 
 .record.expanded {
@@ -210,15 +165,30 @@ header span {
   cursor: pointer;
 }
 
+.feedback-summary {
+  background-color: rgb(240, 240, 240);
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.compilation-info {
+  display: flex;
+  flex-direction: row;
+}
+
 .test-info {
   display: grid;
   grid-template-columns: 2fr 3fr 1fr 1fr;
   font-size: 22px;
   transition: all ease-in-out 0.2s;
+  box-sizing: border-box;
+  background-color: white;
 }
 
 .test-info:hover {
-  background-color: #5cd2e2;
+  background-color: var(--background-color-test-info-hover);
 }
 
 .test-status {

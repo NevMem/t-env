@@ -3,6 +3,7 @@ import CustomCheckBox from './CustomCheckBox'
 import CustomToggler from './CustomToggler'
 import CustomRangeSlider from './CustomRangeSlider'
 import PropTypes from 'prop-types'
+import './evaluation-card.css'
 
 export default class EvaluationCard extends Component {
   constructor(prps) {

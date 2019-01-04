@@ -9,7 +9,6 @@ import Notifications from './components/Notifications'
 export default class App extends Component {
   constructor(prps) {
     super(prps)
-    console.log('Hello')
     this.state = {
       socket: openSocket('http://localhost:80'),
       online: false,
@@ -27,11 +26,15 @@ export default class App extends Component {
 
       newTestName: '',
 
-      notifications: []
+      notifications: [],
     }
     this.state.socket.on('connect', () => {
       console.log('connected')
-      this.addNotification({ type: 'success', msg: 'connected to server', heading: 'client' })
+      this.addNotification({
+        type: 'success',
+        msg: 'connected to server',
+        heading: 'client',
+      })
       this.setState({ online: true, tests: [], queue: [] })
     })
     this.state.socket.on('new test', test => {
@@ -43,33 +46,33 @@ export default class App extends Component {
       this.setState({ queue: [record, ...this.state.queue] })
     })
     this.state.socket.on('test input', data => {
-      let {testId, input} = data
+      let { testId, input } = data
       for (let i = 0; i < this.state.tests.length; ++i) {
         if (this.state.tests[i].id === testId) {
           this.setState({
             tests: update(this.state.tests, {
               [i]: {
                 $merge: {
-                  input: input
-                }
-              }
-            })
+                  input: input,
+                },
+              },
+            }),
           })
         }
       }
     })
     this.state.socket.on('test answer', data => {
-      let {testId, answer} = data
+      let { testId, answer } = data
       for (let i = 0; i < this.state.tests.length; ++i) {
         if (this.state.tests[i].id === testId) {
           this.setState({
             tests: update(this.state.tests, {
               [i]: {
                 $merge: {
-                  answer: answer
-                }
-              }
-            })
+                  answer: answer,
+                },
+              },
+            }),
           })
         }
       }
@@ -110,20 +113,24 @@ export default class App extends Component {
     })
     this.state.socket.on('disconnect', () => {
       console.log('disconnected')
-      this.addNotification({ type: 'error', msg: 'disconnected from server', heading: 'client' })
+      this.addNotification({
+        type: 'error',
+        msg: 'disconnected from server',
+        heading: 'client',
+      })
       this.setState({ online: false, tests: [], queue: [] })
     })
   }
 
   addNotification(notification) {
     this.setState({
-      notifications: [ ...this.state.notifications, notification ]
+      notifications: [...this.state.notifications, notification],
     })
   }
 
   inputChange(event) {
     this.setState({
-      [event.target.id]: event.target.value
+      [event.target.id]: event.target.value,
     })
   }
 
@@ -131,8 +138,8 @@ export default class App extends Component {
     if (!this.state.socket) {
       addNotification({
         type: 'error',
-        msg: 'You\'re disconnected',
-        heading: 'Connection problems'
+        msg: "You're disconnected",
+        heading: 'Connection problems',
       })
     } else {
       this.state.socket.emit('evaluate', settings)
@@ -142,13 +149,12 @@ export default class App extends Component {
   deleteTest(event) {
     event.preventDefault()
     this.state.socket.emit('delete test', {
-      testId: this.state.tests[this.state.testIndex].id
+      testId: this.state.tests[this.state.testIndex].id,
     })
   }
 
   renderModalContent() {
-    if (this.state.modalMode === 'none')
-      return null
+    if (this.state.modalMode === 'none') return null
     if (this.state.modalMode === 'show feedback') {
       let testName = 'Undefined'
       let timeConsumed = 'Undefined'
@@ -157,9 +163,15 @@ export default class App extends Component {
       let input = 'Undefined'
       let output = 'Undefined'
       let answer = 'Undefined'
-      if (this.state.queueIndex !== undefined && this.state.testIndex !== undefined) {
+      if (
+        this.state.queueIndex !== undefined &&
+        this.state.testIndex !== undefined
+      ) {
         console.log(this.state.queue[this.state.queueIndex])
-        testName = this.state.getTestNameById[this.state.queue[this.state.queueIndex].feedback[this.state.testIndex].testId]
+        testName = this.state.getTestNameById[
+          this.state.queue[this.state.queueIndex].feedback[this.state.testIndex]
+            .testId
+        ]
         timeConsumed = this.state.queue[this.state.queueIndex].feedback[
           this.state.testIndex
         ].time
@@ -177,44 +189,41 @@ export default class App extends Component {
         if (input === undefined) {
           input = 'Undefined'
           this.state.socket.emit('get test input', {
-            testId: this.state.tests[this.state.testIndex].id
+            testId: this.state.tests[this.state.testIndex].id,
           })
         }
         if (answer === undefined) {
           this.state.socket.emit('get test answer', {
-            testId: this.state.tests[this.state.testIndex].id
+            testId: this.state.tests[this.state.testIndex].id,
           })
           answer = 'Undefined'
         }
-        if (output === undefined || (output !== undefined && output.length === 0)) {
+        if (
+          output === undefined ||
+          (output !== undefined && output.length === 0)
+        ) {
           output = 'UNDEFINED'
         }
       }
       return (
-        <div className="test-info-field">
-          <div className="full-test-info">
+        <div className='test-info-field'>
+          <div className='full-test-info'>
             <h2>Test name: {testName}</h2>
             <h3>Verdict: {status}</h3>
             <h3>Exit code: {exitCode}</h3>
             <h3>Time consumed: {timeConsumed}</h3>
           </div>
-          <div className="test-input">
+          <div className='test-input'>
             <div>Input</div>
-            <div className = 'text-area'>
-              {input}
-            </div>
+            <div className='text-area'>{input}</div>
           </div>
-          <div className="test-answer">
+          <div className='test-answer'>
             <div>Answer</div>
-            <div className = 'text-area'>
-              {answer}
-            </div>
+            <div className='text-area'>{answer}</div>
           </div>
-          <div className="test-output">
+          <div className='test-output'>
             <div>Output</div>
-            <div className = 'text-area'>
-              {output}
-            </div>
+            <div className='text-area'>{output}</div>
           </div>
         </div>
       )
@@ -226,32 +235,37 @@ export default class App extends Component {
       answer = this.state.tests[this.state.testIndex].answer
       if (input === undefined) {
         input = 'Undefind'
-        this.state.socket.emit('get test input', { testId: this.state.tests[this.state.testIndex].id })
+        this.state.socket.emit('get test input', {
+          testId: this.state.tests[this.state.testIndex].id,
+        })
       }
       if (answer === undefined) {
         answer = 'Undefined'
-        this.state.socket.emit('get test answer', { testId: this.state.tests[this.state.testIndex].id })
+        this.state.socket.emit('get test answer', {
+          testId: this.state.tests[this.state.testIndex].id,
+        })
       }
       return (
-        <div className = 'testModeration'>
-          <div className = 'heading'>
-            <h1>Test name: {this.state.tests[this.state.testIndex].testName}</h1>
+        <div className='testModeration'>
+          <div className='heading'>
+            <h1>
+              Test name: {this.state.tests[this.state.testIndex].testName}
+            </h1>
             <h2>Test id: {this.state.tests[this.state.testIndex].id}</h2>
           </div>
-          <div className = 'input-area'>
+          <div className='input-area'>
             <h3>Input:</h3>
-            <div className = 'text-area'>
-              {input}
-            </div>
+            <div className='text-area'>{input}</div>
           </div>
-          <div className = 'answer-area'>
+          <div className='answer-area'>
             <h3>Answer:</h3>
-            <div className = 'text-area'>
-              {answer}
-            </div>
+            <div className='text-area'>{answer}</div>
           </div>
-          <div className = 'centered fill-2-column'>
-            <div onClick = {this.deleteTest.bind(this)} className = 'btn btn-danger'>
+          <div className='centered fill-2-column'>
+            <div
+              onClick={this.deleteTest.bind(this)}
+              className='btn btn-danger'
+            >
               DELETE TEST
             </div>
           </div>
@@ -259,18 +273,16 @@ export default class App extends Component {
       )
     }
     if (this.state.modalMode === 'test creation') {
-      return (
-        <CreateTestForm socket = {this.state.socket} />
-      )
+      return <CreateTestForm socket={this.state.socket} />
     }
     return null
   }
 
   renderModalHeader() {
     return (
-      <div className="modal-header-row">
+      <div className='modal-header-row'>
         <h2>{this.state.modalHeader}</h2>
-        <div className="modal-close" onClick={this.closeModal.bind(this)}>
+        <div className='modal-close' onClick={this.closeModal.bind(this)}>
           close
         </div>
       </div>
@@ -306,7 +318,7 @@ export default class App extends Component {
             this.state.socket.emit('get test name by id', {
               testId: element.testId,
             })
-          }
+          },
         )
       }
     }
@@ -318,7 +330,7 @@ export default class App extends Component {
       queueIndex: queueIndex,
       testIndex: testIndex,
       modalMode: 'show feedback',
-      modalHeader: 'Test feedback'
+      modalHeader: 'Test feedback',
     })
     this.showModal()
   }
@@ -329,7 +341,7 @@ export default class App extends Component {
     this.setState({
       modalMode: 'moderate test',
       testIndex: index,
-      modalHeader: 'Test info'
+      modalHeader: 'Test info',
     })
     this.showModal()
   }
@@ -338,7 +350,7 @@ export default class App extends Component {
     event.preventDefault()
     this.setState({
       modalHeader: 'Create test',
-      modalMode: 'test creation'
+      modalMode: 'test creation',
     })
     this.showModal()
   }
@@ -348,40 +360,55 @@ export default class App extends Component {
     let newNotifications = [...this.state.notifications]
     newNotifications.splice(this.state.notifications.length - 1 - index, 1)
     this.setState({
-      notifications: newNotifications
+      notifications: newNotifications,
     })
   }
 
   render() {
     return (
-      <div className="wrapper">
+      <div className='wrapper'>
         <Modal
           modalHeader={this.state.modalHeader}
           renderContent={this.renderModalContent.bind(this)}
           renderHeader={this.renderModalHeader.bind(this)}
           visible={this.state.modalVisible}
         />
-        <Notifications delete = {this.removeNotification.bind(this)} maxCount = {7} notifications = {this.state.notifications} />
-        <header className = {this.state.online ? 'headerOnline' : 'headerOffline'}>
+        <Notifications
+          delete={this.removeNotification.bind(this)}
+          maxCount={7}
+          notifications={this.state.notifications}
+        />
+        <header
+          className={this.state.online ? 'headerOnline' : 'headerOffline'}
+        >
           <h1>Testing environment</h1>
         </header>
-        <div className="tests-card">
+        <div className='tests-card'>
           <h2>Все тесты:</h2>
-          <div className="tests">
+          <div className='tests'>
             {this.state.tests.map((el, index) => {
               return (
-                <div onClick = {this.moderateTest.bind(this, index)} className="test" key={index}>
+                <div
+                  onClick={this.moderateTest.bind(this, index)}
+                  className='test'
+                  key={index}
+                >
                   {el.testName}
                 </div>
               )
             })}
-            <div onClick = {this.addTest.bind(this)} className="test add-test">+Add</div>
+            <div onClick={this.addTest.bind(this)} className='test add-test'>
+              +Add
+            </div>
           </div>
         </div>
-        <EvaluationCard notify = {this.addNotification.bind(this)} evaluate = {this.evaluate.bind(this)} />
-        <div className="queue-card">
-          <div className="queue">
-            <div className="record rhead">
+        <EvaluationCard
+          notify={this.addNotification.bind(this)}
+          evaluate={this.evaluate.bind(this)}
+        />
+        <div className='queue-card'>
+          <div className='queue'>
+            <div className='record rhead'>
               <div>Название файла</div>
               <div>Статус</div>
               <div>Policy</div>
@@ -389,9 +416,9 @@ export default class App extends Component {
             {this.state.queue.map((el, index) => {
               if (!el.expanded) {
                 return (
-                  <div key={index} className="record-box">
+                  <div key={index} className='record-box'>
                     <div
-                      className="record"
+                      className='record'
                       onClick={this.expandRecord.bind(this, index)}
                     >
                       <div>{el.filename}</div>
@@ -401,27 +428,43 @@ export default class App extends Component {
                   </div>
                 )
               } else {
+                let fullCount = el.feedback.length
+                let okCount = 0
+                for (let i = 0; i !== el.feedback.length; ++i) {
+                  if (el.feedback[i].status === 'ok') {
+                    okCount += 1
+                  }
+                }
                 return (
-                  <div key={index} className="record-box">
+                  <div key={index} className='record-box'>
                     <div
-                      className="record expanded"
+                      className='record expanded'
                       onClick={this.expandRecord.bind(this, index)}
                     >
                       <div>{el.filename}</div>
                       <div>{el.status}</div>
                       <div>{el.policy}</div>
                     </div>
-                    <div className="full-feedback">
-                      <div className="feedback-list">
+                    <div className='full-feedback'>
+                      <div className='feedback-summary'>
+                        <div className = 'compilation-info'>
+                          <div>compilation args:</div>
+                          <div>{JSON.stringify(el.compilationArgs)}</div>
+                        </div>
+                        <div className = 'ok-count'>
+                          <div>{okCount} / {fullCount}</div>
+                        </div>
+                      </div>
+                      <div className='feedback-list'>
                         {el.feedback.map((element, indexOfElement) => {
                           return (
                             <div
-                              className="test-info"
+                              className='test-info'
                               key={indexOfElement}
                               onClick={this.showTestFeedback.bind(
                                 this,
                                 index,
-                                indexOfElement
+                                indexOfElement,
                               )}
                             >
                               <div>
@@ -429,13 +472,13 @@ export default class App extends Component {
                                   ? this.state.getTestNameById[element.testId]
                                   : 'Loading'}
                               </div>
-                              <div className="test-status">
+                              <div className='test-status'>
                                 {element.status}
                               </div>
-                              <div className="test-status">
+                              <div className='test-status'>
                                 {((element.time * 100) | 0) / 100} ms
                               </div>
-                              <div className="test-status">
+                              <div className='test-status'>
                                 {element.exitCode}
                               </div>
                             </div>
