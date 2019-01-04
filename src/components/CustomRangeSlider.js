@@ -32,7 +32,15 @@ export default class CustomRangeSlider extends Component {
       currentMove = 0
     if (currentMove > workWidth)
       currentMove = workWidth
-    this.changeCurrentValue(this.props.min + ((this.props.max - this.props.min) * currentMove / workWidth | 0))
+    let new_value = this.props.min + ((this.props.max - this.props.min) * currentMove / workWidth | 0)
+    if (this.props.roundingTo) {
+      new_value = ((new_value / this.props.roundingTo + 0.5) | 0) * this.props.roundingTo
+      if (new_value < this.props.min)
+        new_value = this.props.min
+      if (new_value > this.props.max)
+        new_value = this.props.max
+    }
+    this.changeCurrentValue(new_value)
   }
 
   mouseUp = () => {
