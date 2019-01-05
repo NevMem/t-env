@@ -1,0 +1,30 @@
+.compilation-out {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.compilation-out > div {
+    width: 100%;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    display: flex;
+    flex-direction: row;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.compilation-out div :first-child {
+    min-width: 70px;
+    max-width: 70px;
+    padding-left: 10px;
+}
+
+.compilation-out > :nth-child(2n+0) {
+    background-color: rgb(246, 246, 246);
+}
+
+.compilation-out > :nth-child(2n+1) {
+    background-color: rgb(230, 230, 230);
+}

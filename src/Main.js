@@ -1,10 +1,11 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import openSocket from 'socket.io-client'
 import update from 'react-addons-update'
 import Modal from './Modal'
 import CreateTestForm from './components/CreateTestForm'
 import EvaluationCard from './components/EvaluationCard'
 import Notifications from './components/Notifications'
+import CompilationOut from './components/CompilationOut'
 
 export default class App extends Component {
   constructor(prps) {
@@ -452,7 +453,6 @@ export default class App extends Component {
                   </div>
                 )
               } else {
-                console.log(el.compilation_out)
                 return (
                   <div key={index} className='record-box'>
                     <div
@@ -470,6 +470,7 @@ export default class App extends Component {
                           <div>compilation args:</div>
                           <div>{JSON.stringify(el.compilationArgs)}</div>
                         </div>
+                        <CompilationOut content = {el.compilation_out} />
                         <div className = 'ok-count'>
                           <div>Result:</div>
                           <div>{okCount} / {fullCount}</div>
