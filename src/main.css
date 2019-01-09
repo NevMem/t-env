@@ -21,6 +21,12 @@ html {
   grid-template-rows: min-content auto;
 }
 
+@media screen and (min-width: 1900px) {
+  #app {
+    /* grid-template-columns: repeat(2, 10px) repeat(12, 1fr) repeat(2, 10px); */
+  }
+}
+
 .wrapper {
   display: grid;
   grid-template-rows: 0px 90px min-content 220px auto;

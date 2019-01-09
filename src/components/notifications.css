@@ -90,3 +90,24 @@
   padding-bottom: 20px;
   color: white;
 }
+
+.notification-enter {
+  opacity: 0.01;
+  margin-bottom: -91px;
+  transition: all 200ms linear;
+}
+.notification-enter-active {
+  opacity: 1;
+  margin-bottom: 5px;
+}
+.notification-enter-done { 
+  margin-bottom: 5px;
+}
+.notification-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+.notification-exit-active {
+  opacity: 0.01;
+  transition: all 200ms linear;
+}
