@@ -134,7 +134,7 @@ export default class App extends Component {
         msg: 'disconnected from server',
         heading: 'client',
       })
-      this.setState({ online: false, tests: [], queue: [] })
+      this.setState({ online: false, tests: [], queue: [], modalVisible: false, modalMode: 'none' })
     })
   }
 
@@ -391,7 +391,7 @@ export default class App extends Component {
         />
         <Notifications
           delete={this.removeNotification.bind(this)}
-          maxCount={7}
+          maxCount={5}
           notifications={this.state.notifications}
         />
         <header
@@ -470,7 +470,7 @@ export default class App extends Component {
                           <div>compilation args:</div>
                           <div>{JSON.stringify(el.compilationArgs)}</div>
                         </div>
-                        <CompilationOut content = {el.compilation_out} />
+                        {el.compilation_out !== undefined && <CompilationOut content = {el.compilation_out} /> }
                         <div className = 'ok-count'>
                           <div>Result:</div>
                           <div>{okCount} / {fullCount}</div>
