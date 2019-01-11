@@ -92,8 +92,13 @@ io.on('connection', socket => {
         let runType = 'single'
         if (settings.runType === 'parallel')
             runType = 'parallel'
-        worker.addToQueue('D:\\memlo\\workspace\\prepare\\src\\contest.cpp', compilationArgs, settings.timelimit, runType)
-        onlineChanges.emit('new record', worker.getQueue().length - 1)
+        if (settings.path !== undefined) {
+            worker.addToQueue(settings.path, compilationArgs, settings.timelimit, runType)
+            onlineChanges.emit('new record', worker.getQueue().length - 1)
+            onlineChanges.emit('info', { type: 'success', msg: 'Program will be tested', heading: 'Server' })
+        } else {
+            onlineChanges.emit('info', { type: 'error', msg: 'You didn\t specify the path to your program', heading: 'Server' })
+        }
     })
 
     socket.on('delete test', (msg) => {
@@ -138,6 +143,10 @@ onlineChanges.on('change status', (message) => {
     for (let client of connections) {
         client.emit('change status', message)
     }
+})
+
+onlineChanges.on('info', msg => {
+    sendAll('info', msg)
 })
 
 onlineChanges.on('change compilation out', msg => {

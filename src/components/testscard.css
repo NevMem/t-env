@@ -12,9 +12,11 @@
     line-height: 60px;
     padding-left: 20px;
     font-weight: 300;
-    color: rgb(134, 134, 134);
+    /* color: rgb(134, 134, 134); */
+    color: black;
+    font-size: 1.7em;
+    line-height: 2.3em;
     border-bottom: 1px solid var(--tests-card-maincolor);
-    /* color: var(--tests-card-maincolor); */
 }
 
 .tests {

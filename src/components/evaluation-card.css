@@ -9,6 +9,8 @@
   background-color: #ffffff;
   display: grid;
   grid-template-rows: max-content min-content;
+  border: 2px solid rgba(95, 95, 95, 0.156);
+  border-radius: 3px;
 }
 
 .evaluation-settings {

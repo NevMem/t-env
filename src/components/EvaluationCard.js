@@ -137,6 +137,7 @@ export default class EvaluationCard extends Component {
       using_glibcxx_debug: this.state.using_glibcxx_debug,
       using_glibcxx_debug_pedantic: this.state.using_glibcxx_debug_pedantic,
       runType: this.state.runType,
+      path: this.state.path,
     }
     if (this.props.notify)
       this.props.notify({
