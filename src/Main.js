@@ -397,7 +397,11 @@ export default class App extends Component {
           notifications={this.state.notifications}
         />
         <Header isOnline = {this.state.online} />
-        <TestsCard tests = {this.state.tests} />
+        <TestsCard
+          tests = {this.state.tests}
+          moderateTest = {this.moderateTest.bind(this)}
+          addTest = {this.addTest.bind(this)}
+        />
         <EvaluationCard
           notify={this.addNotification.bind(this)}
           evaluate={this.evaluate.bind(this)}

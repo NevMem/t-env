@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import './testscard.css'
 
 export default class TestsCard extends Component {
   constructor(prps) {
@@ -14,7 +15,7 @@ export default class TestsCard extends Component {
           {this.props.tests.map((el, index) => {
             return (
               <div
-                // onClick={this.moderateTest.bind(this, index)}
+                onClick={this.props.moderateTest.bind(this, index)}
                 className='test'
                 key={index}
               >
@@ -23,7 +24,7 @@ export default class TestsCard extends Component {
             )
           })}
           <div
-            // onClick={this.addTest.bind(this)}
+            onClick={this.props.addTest}
             className='test add-test'
           >
             +Add
@@ -35,5 +36,7 @@ export default class TestsCard extends Component {
 }
 
 TestsCard.propTypes = {
-  tests: PropTypes.array.isRequired
+  tests: PropTypes.array.isRequired,
+  moderateTest: PropTypes.func.isRequired,
+  addTest: PropTypes.func.isRequired
 }
