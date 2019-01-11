@@ -36,15 +36,16 @@ export default class EvaluationCard extends Component {
 
   __load_number_field(field_name, bounds) {
     let value = localStorage.getItem(field_name)
-    if (value === undefined) return
+    if (value === null) return
     value = parseInt(value, 10)
     if (bounds && bounds[0] <= value && value <= bounds[1]) return
     this.setState({ [field_name]: value })
   }
 
   __load_string_field(field_name) {
-    if (localStorage.getItem(field_name) !== undefined)
+    if (localStorage.getItem(field_name) !== null) {
       this.setState({ [field_name]: localStorage.getItem(field_name) })
+    }
   }
 
   loadSettings() {
@@ -54,6 +55,7 @@ export default class EvaluationCard extends Component {
     this.__load_boolean_field('runTypeToggled')
     this.__load_string_field('runType')
     this.__load_number_field('timelimit', [this.state.min, this.state.max])
+    this.__load_string_field('path')
   }
 
   saveSettings() {
@@ -66,6 +68,7 @@ export default class EvaluationCard extends Component {
     )
     localStorage.setItem('using_glibcxx_debug', this.state.using_glibcxx_debug)
     localStorage.setItem('timelimit', this.state.timelimit)
+    localStorage.setItem('path', this.state.path)
   }
 
   toggle_O2() {
@@ -147,6 +150,8 @@ export default class EvaluationCard extends Component {
   handleChange(event) {
     this.setState({
       [event.target.id]: event.target.value
+    }, () => {
+      this.saveSettings()
     })
   }
 
