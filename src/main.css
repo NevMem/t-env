@@ -6,7 +6,7 @@
 }
 
 :root {
-  --background-color: #f0f1f5;
+  --background-color: white; /*#f9f9f9;*/
   --button-danger-color: rgb(255, 116, 36);
   --background-color-test-info-hover: #ff1c8613;
 }
@@ -24,10 +24,8 @@ html {
 .wrapper {
   display: grid;
   grid-template-rows: 0px 90px min-content min-content auto;
-  /* min-height: 100vh; */
   grid-column: 3 / 15;
-  /* box-shadow: 0px 3px 6px rgb(182, 183, 185); */
-  grid-gap: 20px;
+  /* grid-gap: 20px; */
 }
 
 .queue-card {

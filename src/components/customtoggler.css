@@ -6,9 +6,9 @@
 }
 
 :root {
-  --toggler-circle-border-color: #2e2d4d;
-  --toggler-circle-background-color: #2e2d4d;
-  --toggler-thumb-border-color: #2e2d4d;
+  --toggler-circle-border-color: rgb(119, 0, 255); /*#2e2d4d;*/
+  --toggler-circle-background-color: rgb(119, 0, 255); /*#2e2d4d;*/
+  --toggler-thumb-border-color: rgb(119, 0, 255); /*#2e2d4d;*/
   --toggler-thumb-background-color: #fffffc;
 }
 

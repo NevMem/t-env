@@ -1,7 +1,7 @@
 :root {
-  --checkbox-color: #2e2d4d;
-  --checkbox-hover-color: #2e2d4d0c;
-  --checkbox-hover-box-shadow-color: #2e2d4d67;
+  --checkbox-color: rgb(119, 0, 255); /*#2e2d4d;*/
+  --checkbox-hover-color: rgb(119, 0, 255, .1); /*#2e2d4d0c;*/
+  --checkbox-hover-box-shadow-color: rgba(119, 0, 255, .4); /*#2e2d4d67;*/
 }
 
 .custom_checkbox {
@@ -23,6 +23,7 @@
   transition: all ease-in 0.1s;
   cursor: pointer;
   position: relative;
+  transition: all .2s linear;
 }
 
 .custom_checkbox span:hover {

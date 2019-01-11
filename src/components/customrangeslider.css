@@ -6,10 +6,10 @@
 }
 
 :root {
-  --slider-thumb-border-color: #2e2d4d;
-  --slider-thumb-background-color: #2e2d4d;
-  --thumb-shadow-color: #2e2d4d90;
-  --track-border-color: #2e2d4d;
+  --slider-thumb-border-color: rgb(119, 0, 255); /*#2e2d4d;*/
+  --slider-thumb-background-color: rgb(119, 0, 255); /*#2e2d4d;*/
+  --thumb-shadow-color: rgba(119, 0, 255, .56); /*#2e2d4d90;*/
+  --track-border-color: rgb(119, 0, 255); /*#2e2d4d;*/
   --track-background-color: white;
 }
 
