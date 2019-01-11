@@ -1,0 +1,34 @@
+.text-field {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    border: none;
+    border-bottom: 1px solid #06444d;
+    padding: 10px 7px;
+    outline: none;
+    font-size: 20px;
+    transform: translateY(-50%);
+    z-index: 2;
+    background-color: transparent;
+    min-width: 50%;
+}
+
+.text-field:focus + span, .text-field.filled + span {
+    transform: translateY(-50%) translateY(-20px) translateX(0px) scale(0.7);
+}
+
+.input-group {
+    position: relative;
+    transition: all ease-in .2s;
+}
+
+.input-group span {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+    transition: all ease-in .2s;
+    transform-origin: top left;
+    z-index: 1;
+    color: rgb(83, 83, 83);
+}

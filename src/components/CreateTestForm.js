@@ -5,7 +5,7 @@ export default class CreateTestForm extends Component {
   constructor(prps) {
     super(prps)
     this.state = {
-      name: 'srtn',
+      name: '',
       input: '',
       output: ''
     }
@@ -33,7 +33,7 @@ export default class CreateTestForm extends Component {
   render() {
     return (
       <div className = 'testCreation'>
-        <TextField lable = 'Test name' id = 'name' value = {this.state.name} onChange = {this.handleChange.bind(this)} />
+        <TextField label = 'Enter test name' id = 'name' value = {this.state.name} onChange = {this.handleChange.bind(this)} />
         <div className = 'input-answer-fields'>
           <textarea onChange = {this.handleChange.bind(this)} id = 'input' value = {this.state.input} className = 'input'>
           </textarea>

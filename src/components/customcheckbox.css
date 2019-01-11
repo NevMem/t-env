@@ -1,13 +1,13 @@
-.custom_checkbox {
-  display: flex;
-  flex-direction: row;
-  /* padding: 20px 20px; */
-}
-
 :root {
   --checkbox-color: #2e2d4d;
   --checkbox-hover-color: #2e2d4d0c;
   --checkbox-hover-box-shadow-color: #2e2d4d67;
+}
+
+.custom_checkbox {
+  display: flex;
+  flex-direction: row;
+  padding: 20px 20px;
 }
 
 .custom_checkbox div {
