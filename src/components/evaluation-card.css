@@ -10,10 +10,20 @@
 .evaluation-card {
   grid-row: 4;
   background-color: #ffffff;
-  box-shadow: 0px 3px 6px rgb(182, 183, 185, 0.9);
+  /* box-shadow: 0px 3px 6px rgb(182, 183, 185, 0.9); */
 
   display: grid;
   grid-template-rows: 100px auto;
+}
+
+.evaluation-settings {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-column-gap: 20px;
+  grid-row-gap: 15px;
 }
 
 .evaluateButtonDiv {

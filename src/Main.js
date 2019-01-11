@@ -6,6 +6,7 @@ import CreateTestForm from './components/CreateTestForm'
 import EvaluationCard from './components/EvaluationCard'
 import Notifications from './components/Notifications'
 import CompilationOut from './components/CompilationOut'
+import Header from './components/Header.js'
 
 export default class App extends Component {
   constructor(prps) {
@@ -394,11 +395,7 @@ export default class App extends Component {
           maxCount={5}
           notifications={this.state.notifications}
         />
-        <header
-          className={this.state.online ? 'headerOnline' : 'headerOffline'}
-        >
-          <h1>Testing environment</h1>
-        </header>
+        <Header isOnline = {this.state.online} />
         <div className='tests-card'>
           <h2>Все тесты:</h2>
           <div className='tests'>
