@@ -7,6 +7,7 @@ import EvaluationCard from './components/EvaluationCard'
 import Notifications from './components/Notifications'
 import CompilationOut from './components/CompilationOut'
 import Header from './components/Header.js'
+import TestsCard from './components/TestsCard';
 
 export default class App extends Component {
   constructor(prps) {
@@ -396,25 +397,7 @@ export default class App extends Component {
           notifications={this.state.notifications}
         />
         <Header isOnline = {this.state.online} />
-        <div className='tests-card'>
-          <h2>Все тесты:</h2>
-          <div className='tests'>
-            {this.state.tests.map((el, index) => {
-              return (
-                <div
-                  onClick={this.moderateTest.bind(this, index)}
-                  className='test'
-                  key={index}
-                >
-                  {el.testName}
-                </div>
-              )
-            })}
-            <div onClick={this.addTest.bind(this)} className='test add-test'>
-              +Add
-            </div>
-          </div>
-        </div>
+        <TestsCard tests = {this.state.tests} />
         <EvaluationCard
           notify={this.addNotification.bind(this)}
           evaluate={this.evaluate.bind(this)}
