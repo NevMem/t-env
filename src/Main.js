@@ -300,9 +300,7 @@ export default class App extends Component {
     return (
       <div className='modal-header-row'>
         <h2>{this.state.modalHeader}</h2>
-        <div className='modal-close' onClick={this.closeModal.bind(this)}>
-          close
-        </div>
+        <div className='modal-close' onClick={this.closeModal.bind(this)}></div>
       </div>
     )
   }

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import './modalStyles.css'
 
 export default class Modal extends Component {
@@ -19,4 +20,9 @@ export default class Modal extends Component {
       </div>
     )
   }
+}
+
+Modal.propTypes = {
+  renderContent: PropTypes.func.isRequired,
+  renderHeader: PropTypes.func.isRequired,
 }

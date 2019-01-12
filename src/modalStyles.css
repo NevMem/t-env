@@ -1,6 +1,8 @@
 :root {
-  /* --header-color: #024eff; TODO: */
-  --header-color: rgb(40, 40, 50);
+  /* --header-color: #282832; */
+  --header-color: white;
+  --header-font-color: black;
+  --background-color: white;
 }
 
 .modal-blur {
@@ -9,26 +11,26 @@
   bottom: 0px;
   left: 0px;
   right: 0px;
-  -moz-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+  background-color: rgba(119, 0, 255, .9);
   z-index: 10;
 }
 
 .modal-core {
-  width: 900px;
+  width: 800px;
   top: 50%;
   left: 50%;
   position: fixed;
   display: grid;
   grid-template-rows: 70px min-content;
-  box-shadow: 0px 3px 6px #a5a5a5;
+  box-shadow: 0px 3px 100px rgba(62, 0, 133, 0.603);
   transform: translate(-50%, -50%);
-  overflow: hidden;
   z-index: 10;
 }
 
 .modal-header {
   background-color: var(--header-color);
-  color: white;
+  color: var(--header-font-color);
   padding-left: 20px;
   padding-right: 20px;
   line-height: 70px;
@@ -37,11 +39,10 @@
 }
 
 .modal-content {
-  padding: 0px 20px;
+  padding: 20px 20px;
   line-height: 40px;
-  background-color: white;
+  background-color: var(--background-color);
   overflow: hidden;
-  height: 100%;
   transition: all ease-in 0.5s;
   z-index: 1;
 }
@@ -55,4 +56,30 @@
 .modal-close {
   color: rgba(240, 240, 240, 0.7);
   cursor: pointer;
+  position: absolute;
+  top: 0px;
+  right: -40px;
+  transform: rotate(45deg);
+  width: 28px;
+  height: 28px;
+}
+
+.modal-close:after {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 28px;
+  background-color: var(--background-color);
+  top: 0px;
+  left: 13px;
+}
+
+.modal-close:before {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 2px;
+  background-color: var(--background-color);
+  top: 13px;
+  left: 0px;
 }

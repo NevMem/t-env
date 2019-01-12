@@ -1,15 +1,15 @@
 :root {
-  --default-background-color: rgba(50, 100, 200, .8);
+  --default-background-color: rgba(50, 100, 200, .9);
   --default-border-color: rgba(50, 100, 200, .9);
-  --default-shadow-color: rgba(50, 100, 200, .7);
+  --default-shadow-color: rgba(50, 100, 200, .1);
 
-  --success-background-color: rgba(10, 200, 50, .8);
+  --success-background-color: rgba(10, 200, 50, .9);
   --success-border-color: rgba(10, 200, 50, .9);
-  --success-shadow-color: rgba(10, 200, 50, .7);
+  --success-shadow-color: rgba(10, 200, 50, .1);
   
-  --error-background-color: rgba(200, 10, 50, .8);
+  --error-background-color: rgba(200, 10, 50, .9);
   --error-border-color: rgba(200, 10, 50, .9);
-  --error-shadow-color: rgba(200, 10, 50, .7);
+  --error-shadow-color: rgba(200, 10, 50, .1);
 }
 
 .notifications {
