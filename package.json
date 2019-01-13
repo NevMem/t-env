@@ -51,6 +51,7 @@
   "nodemonConfig": {
     "ignore": [
       "tests.json",
+      "queue.json",
       "src/*",
       "public/*",
       "src/**"

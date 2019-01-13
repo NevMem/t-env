@@ -35,11 +35,24 @@ let loadTests = () => {
     console.log('Loaded test from file'.green + (' count of tests : ' + tests.length).cyan)
 }
 
+let __save_queue = () => {
+    fs.writeFileSync('queue.json', JSON.stringify(invokationQueue))
+}
+
+let __load_queue = () => {
+    if (fs.existsSync('queue.json')) {
+        invokationQueue = JSON.parse(fs.readFileSync('queue.json', 'utf-8'))
+        invokationLoop.emit('try run')
+    }
+}
+
 invokationLoop.on('new item', () => {
     invokationLoop.emit('try run')
 })
 
 invokationLoop.on('try run', () => {
+    while (currentIndex < invokationQueue.length && invokationQueue[currentIndex].status === 'Ready')
+        currentIndex += 1
     if (currentIndex < invokationQueue.length && !runningNow) {
         runningNow = true
         invokationLoop.emit('run')
@@ -83,6 +96,7 @@ invokationLoop.on('run', () => {
         } else {
             console.log(('Unknown message type: ' + message.type).red)
         }
+        __save_queue()
     })
     invoker.on('exit', (code, signal) => {
         console.log(`Invoker exited with code: ${code} signal: ${signal}`.magenta)
@@ -192,5 +206,5 @@ exports.deleteTest = (info) => {
 }
 
 console.log('Current process pid', process.pid)
-
 loadTests()
+__load_queue()
