@@ -3,14 +3,13 @@ import openSocket from 'socket.io-client'
 import update from 'react-addons-update'
 import Modal from './Modal'
 import CreateTestForm from './components/CreateTestForm'
-import EvaluationCard from './components/EvaluationCard'
+import EvaluationCard from './components/cards/EvaluationCard'
 import Notifications from './components/Notifications'
-import CompilationOut from './components/CompilationOut'
 import Header from './components/Header.js'
-import TestsCard from './components/TestsCard'
+import TestsCard from './components/cards/TestsCard'
 import ModerateTestForm from './components/ModerateTestForm'
 import Preloader from './components/Preloader'
-import QueueCard from './components/QueueCard'
+import QueueCard from './components/cards/QueueCard'
 
 export default class App extends Component {
   constructor(prps) {

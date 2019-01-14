@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import TextField from './TextField'
+import TextField from './controllers/TextField'
 import PropTypes from 'prop-types'
 import './createTestForm.css'
 

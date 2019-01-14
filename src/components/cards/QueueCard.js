@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import CompilationOut from './CompilationOut'
+import CompilationOut from '../CompilationOut'
 import './queueCard.css'
 
 export default class QueueCard extends Component { 

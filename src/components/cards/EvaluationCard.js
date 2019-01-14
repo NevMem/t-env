@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import CustomCheckBox from './CustomCheckBox'
-import CustomToggler from './CustomToggler'
-import CustomRangeSlider from './CustomRangeSlider'
-import TextField from './TextField'
+import CustomCheckBox from '../controllers/CustomCheckBox'
+import CustomToggler from '../controllers/CustomToggler'
+import CustomRangeSlider from '../controllers/CustomRangeSlider'
+import TextField from '../controllers/TextField'
 import PropTypes from 'prop-types'
 import './evaluation-card.css'
 
