@@ -21,7 +21,9 @@
     "react-addons-css-transition-group": "^15.6.2",
     "react-addons-update": "^15.6.2",
     "react-css-transition": "^0.7.4",
+    "react-redux": "^6.0.0",
     "react-transition-group": "^2.5.2",
+    "redux": "^4.0.1",
     "socket.io": "^2.1.1"
   },
   "devDependencies": {

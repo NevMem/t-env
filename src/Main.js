@@ -10,8 +10,9 @@ import TestsCard from './components/cards/TestsCard'
 import ModerateTestForm from './components/ModerateTestForm'
 import Preloader from './components/Preloader'
 import QueueCard from './components/cards/QueueCard'
+import { connect } from 'react-redux'
 
-export default class App extends Component {
+class App extends Component {
   constructor(prps) {
     super(prps)
     this.state = {
@@ -311,6 +312,7 @@ export default class App extends Component {
   }
 
   expandRecord(index, event) {
+    this.props.dispatch({ type: 'some', payload: 'info' })
     event.preventDefault()
     this.setState({
       queue: update(this.state.queue, {
@@ -416,3 +418,9 @@ export default class App extends Component {
     )
   }
 }
+
+let mapStateToProps = state => {
+  return state
+}
+
+export default connect(mapStateToProps)(App)
