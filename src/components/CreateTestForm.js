@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import TextField from './TextField'
+import PropTypes from 'prop-types'
+import './createTestForm.css'
 
 export default class CreateTestForm extends Component {
   constructor(prps) {
@@ -9,6 +11,11 @@ export default class CreateTestForm extends Component {
       input: '',
       output: ''
     }
+  }
+
+  static propTypes = {
+    socket: PropTypes.any.isRequired,
+    closeModal: PropTypes.func.isRequired
   }
 
   handleChange(event) {
@@ -27,6 +34,7 @@ export default class CreateTestForm extends Component {
         input: input,
         output: output
       })
+      this.props.closeModal()
     }
   }
 

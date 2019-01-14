@@ -199,10 +199,16 @@ exports.deleteTest = (info) => {
     let index = this.getTestIndexById(info.id)
     console.log(index)
     if (index === undefined)
-        return { type: 'error', msg: 'test not found', heading: 'test removing' }
+        return {
+            userMessage: { type: 'error', msg: 'test not found', heading: 'test removing' },
+            result: 'bad'
+        }
     tests.splice(index, 1)
     saveTests()
-    return { type: 'success', msg: 'test was deleted', heading: 'test removing' }
+    return {
+        userMessage: { type: 'success', msg: 'test was deleted', heading: 'test removing' },
+        result: 'ok'
+    }
 }
 
 console.log('Current process pid', process.pid)

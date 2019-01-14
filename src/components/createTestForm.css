@@ -1,0 +1,11 @@
+.testCreation {
+    display: grid;
+    grid-template-rows: 70px 400px 52px;
+    grid-gap: 12px;
+}
+
+.testCreationButtonDiv {
+    display: flex;
+    justify-content: space-around;
+}
+  

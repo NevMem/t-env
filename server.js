@@ -104,7 +104,10 @@ io.on('connection', socket => {
     socket.on('delete test', (msg) => {
         console.log('Request for removing test', msg)
         let info = worker.deleteTest({ id: msg.testId })
-        socket.emit('info', info)
+        socket.emit('info', info.userMessage)
+        if (info.result === 'ok') {
+            socket.emit('delete test', { testId: msg.testId })
+        }
     })
 
     socket.on('disconnect', () => {

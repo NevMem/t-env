@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import openSocket from 'socket.io-client'
 import update from 'react-addons-update'
 import Modal from './Modal'
@@ -7,8 +7,8 @@ import EvaluationCard from './components/EvaluationCard'
 import Notifications from './components/Notifications'
 import CompilationOut from './components/CompilationOut'
 import Header from './components/Header.js'
-import TestsCard from './components/TestsCard';
-import Preloader from './components/Preloader';
+import TestsCard from './components/TestsCard'
+import ModerateTestForm from './components/ModerateTestForm'
 
 export default class App extends Component {
   constructor(prps) {
@@ -33,7 +33,6 @@ export default class App extends Component {
       notifications: [],
     }
     this.state.socket.on('connect', () => {
-      // console.log('connected')
       this.addNotification({
         type: 'success',
         msg: 'connected to server',
@@ -45,9 +44,20 @@ export default class App extends Component {
       this.setState({ tests: [...this.state.tests, test] })
     })
     this.state.socket.on('new record', record => {
-      // console.log(record)
       record.expanded = false
       this.setState({ queue: [record, ...this.state.queue] })
+    })
+    this.state.socket.on('delete test', testInfo => {
+      this.setState(state => {
+        let new_state = Object.assign({}, state)
+        for (let i = 0; i != new_state.tests.length; ++i) {
+          if (new_state.tests[i].id === testInfo.testId) {
+            new_state.tests.splice(i, 1)
+            break
+          }
+        }
+        return new_state
+      })
     })
     this.state.socket.on('test input', data => {
       let { testId, input } = data
@@ -104,7 +114,6 @@ export default class App extends Component {
       this.addNotification(msg)
     })
     this.state.socket.on('change status', status => {
-      // console.log(status)
       this.setState({
         queue: update(this.state.queue, {
           [this.state.queue.length - 1 - status.queueIndex]: {
@@ -131,7 +140,6 @@ export default class App extends Component {
       }
     })
     this.state.socket.on('disconnect', () => {
-      // console.log('disconnected')
       this.addNotification({
         type: 'error',
         msg: 'disconnected from server',
@@ -168,8 +176,13 @@ export default class App extends Component {
   deleteTest(event) {
     event.preventDefault()
     this.state.socket.emit('delete test', {
-      testId: this.state.tests[this.state.testIndex].id,
+      testId: this.state.tests[this.state.testIndex].id
     })
+    this.setState({
+      modalMode: 'none',
+      modalVisible: false,
+    })
+    this.addNotification({ heading: 'Deleting', msg: 'Request for test removing was send', type: 'default' })
   }
 
   renderModalContent() {
@@ -248,51 +261,16 @@ export default class App extends Component {
       )
     }
     if (this.state.modalMode === 'moderate test') {
-      let input = 'Undefined'
-      let answer = 'Undefined'
-      input = this.state.tests[this.state.testIndex].input
-      answer = this.state.tests[this.state.testIndex].answer
-      if (input === undefined) {
-        input = <Preloader isLoaded = {false} />
-        this.state.socket.emit('get test input', {
-          testId: this.state.tests[this.state.testIndex].id,
-        })
-      }
-      if (answer === undefined) {
-        answer = <Preloader isLoaded = {false} />
-        this.state.socket.emit('get test answer', {
-          testId: this.state.tests[this.state.testIndex].id,
-        })
-      }
       return (
-        <div className='testModeration'>
-          <div className='heading'>
-            <h1>
-              Test name: {this.state.tests[this.state.testIndex].testName}
-            </h1>
-            <h2>Test id: {this.state.tests[this.state.testIndex].id}</h2>
-          </div>
-          <div className='input-area'>
-            <h3>Input:</h3>
-            <div className='text-area'>{input}</div>
-          </div>
-          <div className='answer-area'>
-            <h3>Answer:</h3>
-            <div className='text-area'>{answer}</div>
-          </div>
-          <div className='centered fill-2-column'>
-            <div
-              onClick={this.deleteTest.bind(this)}
-              className='btn btn-danger'
-            >
-              DELETE TEST
-            </div>
-          </div>
-        </div>
+        <ModerateTestForm
+          test = {this.state.tests[this.state.testIndex]}
+          socket = {this.state.socket}
+          deleteTest = {this.deleteTest.bind(this)}
+        />
       )
     }
     if (this.state.modalMode === 'test creation') {
-      return <CreateTestForm socket={this.state.socket} />
+      return <CreateTestForm closeModal = {this.closeModal.bind(this)} socket={this.state.socket} />
     }
     return null
   }
@@ -307,7 +285,7 @@ export default class App extends Component {
   }
 
   closeModal() {
-    this.setState({ modalVisible: false })
+    this.setState({ modalVisible: false, modalMode: 'none' })
   }
 
   showModal() {
@@ -354,7 +332,6 @@ export default class App extends Component {
 
   moderateTest(index, event) {
     event.preventDefault()
-    console.log(this.state.tests[index])
     this.setState({
       modalMode: 'moderate test',
       testIndex: index,
