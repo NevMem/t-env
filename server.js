@@ -86,6 +86,18 @@ io.on('connection', socket => {
         })
     })
 
+    socket.on('get test output', info => {
+        console.log('get TEST OUTPUT request'.magenta)
+        let resp = worker.getTestStdout({ queueIndex: info.queueIndex, testIndex: info.testIndex })
+        if (resp.result === 'ok') {
+            socket.emit('test output', {
+                testIndex: info.testIndex,
+                queueIndex: info.queueIndex,
+                stdout: resp.testStdout,
+            })
+        }
+    })
+
     socket.on('add test', data => {
         console.log('add TEST request'.cyan)
         let {input, output, name} = data

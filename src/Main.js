@@ -9,6 +9,7 @@ import CompilationOut from './components/CompilationOut'
 import Header from './components/Header.js'
 import TestsCard from './components/TestsCard'
 import ModerateTestForm from './components/ModerateTestForm'
+import Preloader from './components/Preloader';
 
 export default class App extends Component {
   constructor(prps) {
@@ -90,6 +91,16 @@ export default class App extends Component {
           })
         }
       }
+    })
+    this.state.socket.on('test output', data => {
+      let { queueIndex, testIndex, stdout } = data
+      this.setState(state => {
+        let new_state = Object.assign({}, state)
+        if (queueIndex !== undefined && 0 <= queueIndex && queueIndex < new_state.queue.length &&
+          testIndex !== undefined && 0 <= testIndex && testIndex < new_state.queue[queueIndex].feedback.length)
+          new_state.queue[queueIndex].feedback[testIndex].stdout = stdout
+        return new_state
+      })
     })
     this.state.socket.on('test name by id', data => {
       this.setState(({ getTestNameById }) => {
@@ -218,13 +229,13 @@ export default class App extends Component {
         input = this.state.tests[this.state.testIndex].input
         answer = this.state.tests[this.state.testIndex].answer
         if (input === undefined) {
-          input = 'Undefined'
+          input = <Preloader isLoaded = {false} />
           this.state.socket.emit('get test input', {
             testId: this.state.tests[this.state.testIndex].id,
           })
         }
         if (answer === undefined) {
-          answer = 'Undefined'
+          answer = <Preloader isLoaded = {false} />
           this.state.socket.emit('get test answer', {
             testId: this.state.tests[this.state.testIndex].id,
           })
@@ -233,7 +244,15 @@ export default class App extends Component {
           output === undefined ||
           (output !== undefined && output.length === 0)
         ) {
-          output = 'UNDEFINED'
+          if (output === undefined) {
+            this.state.socket.emit('get test output', {
+              queueIndex: this.state.queueIndex,
+              testIndex: this.state.testIndex,
+            })
+            output = <Preloader isLoaded = {false} />
+          } else {
+            output = 'none'
+          }
         }
       }
       return (

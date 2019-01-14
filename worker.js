@@ -235,6 +235,18 @@ exports.getCuttedQueue = () => {
     return response
 }
 
+exports.getTestStdout = req => {
+    let { queueIndex, testIndex } = req
+    if (queueIndex === undefined || queueIndex < 0 || queueIndex >= invokationQueue.length)
+        return { result: 'bad' }
+    if (testIndex === undefined || testIndex < 0 || testIndex >= invokationQueue[queueIndex].feedback.length)
+        return { result: 'bad' }
+    return {
+        result: 'ok',
+        testStdout: invokationQueue[queueIndex].feedback[testIndex].stdout
+    }
+}
+
 exports.deleteTest = (info) => {
     let index = this.getTestIndexById(info.id)
     console.log(index)

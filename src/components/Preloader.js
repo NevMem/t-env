@@ -17,6 +17,12 @@ export default class Preloader extends Component {
     return res
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.isLoaded !== this.props.isLoaded)
+      return true
+    return false
+  }
+
   render() {
     if (this.props.isLoaded)
       return null
