@@ -99,7 +99,7 @@ export default class App extends Component {
         let new_state = Object.assign({}, state)
         if (queueIndex !== undefined && 0 <= queueIndex && queueIndex < new_state.queue.length &&
           testIndex !== undefined && 0 <= testIndex && testIndex < new_state.queue[queueIndex].feedback.length)
-          new_state.queue[queueIndex].feedback[testIndex].stdout = stdout
+          new_state.queue[new_state.queue.length - 1 - queueIndex].feedback[testIndex].stdout = stdout
         return new_state
       })
     })
@@ -247,7 +247,7 @@ export default class App extends Component {
         ) {
           if (output === undefined) {
             this.state.socket.emit('get test output', {
-              queueIndex: this.state.queueIndex,
+              queueIndex: this.state.queue.length - 1 - this.state.queueIndex,
               testIndex: this.state.testIndex,
             })
             output = <Preloader isLoaded = {false} />
