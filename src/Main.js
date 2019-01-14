@@ -9,7 +9,8 @@ import CompilationOut from './components/CompilationOut'
 import Header from './components/Header.js'
 import TestsCard from './components/TestsCard'
 import ModerateTestForm from './components/ModerateTestForm'
-import Preloader from './components/Preloader';
+import Preloader from './components/Preloader'
+import QueueCard from './components/QueueCard'
 
 export default class App extends Component {
   constructor(prps) {
@@ -376,6 +377,12 @@ export default class App extends Component {
     })
   }
 
+  getTestNameById(id) { 
+    if (this.state.getTestNameById[id])
+      return this.state.getTestNameById[id]
+    return 'Loading'
+  }
+
   render() {
     return (
       <div className='wrapper'>
@@ -400,97 +407,12 @@ export default class App extends Component {
           notify={this.addNotification.bind(this)}
           evaluate={this.evaluate.bind(this)}
         />
-        <div className='queue-card'>
-          <div className='queue'>
-            <div className='record rhead'>
-              <div>File name</div>
-              <div>Result</div>
-              <div>Status</div>
-              <div>Policy</div>
-            </div>
-            {this.state.queue.map((el, index) => {
-              let fullCount = el.feedback.length
-              let okCount = 0
-              for (let i = 0; i !== el.feedback.length; ++i) {
-                if (el.feedback[i].status === 'ok') {
-                  okCount += 1
-                }
-              }
-              if (!el.expanded) {
-                return (
-                  <div key={index} className='record-box'>
-                    <div
-                      className='record'
-                      onClick={this.expandRecord.bind(this, index)}
-                    >
-                      <div>{el.filename}</div>
-                      <div>{okCount}/{fullCount}</div>
-                      <div>{el.status}</div>
-                      <div>{el.policy}</div>
-                    </div>
-                  </div>
-                )
-              } else {
-                return (
-                  <div key={index} className='record-box'>
-                    <div
-                      className='record expanded'
-                      onClick={this.expandRecord.bind(this, index)}
-                    >
-                      <div>{el.filename}</div>
-                      <div>{okCount}/{fullCount}</div>
-                      <div>{el.status}</div>
-                      <div>{el.policy}</div>
-                    </div>
-                    <div className='full-feedback'>
-                      <div className='feedback-summary'>
-                        <div className = 'compilation-info'>
-                          <div>compilation args:</div>
-                          <div>{JSON.stringify(el.compilationArgs)}</div>
-                        </div>
-                        {el.compilation_out !== undefined && <CompilationOut content = {el.compilation_out} /> }
-                        <div className = 'ok-count'>
-                          <div>Result:</div>
-                          <div>{okCount} / {fullCount}</div>
-                        </div>
-                      </div>
-                      <div className='feedback-list'>
-                        {el.feedback.map((element, indexOfElement) => {
-                          return (
-                            <div
-                              className='test-info'
-                              key={indexOfElement}
-                              onClick={this.showTestFeedback.bind(
-                                this,
-                                index,
-                                indexOfElement,
-                              )}
-                            >
-                              <div>
-                                {this.state.getTestNameById[element.testId]
-                                  ? this.state.getTestNameById[element.testId]
-                                  : 'Loading'}
-                              </div>
-                              <div className='test-status'>
-                                {element.status}
-                              </div>
-                              <div className='test-status'>
-                                {((element.time * 100) | 0) / 100} ms
-                              </div>
-                              <div className='test-status'>
-                                {element.exitCode}
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )
-              }
-            })}
-          </div>
-        </div>
+        <QueueCard
+          queue = {this.state.queue}
+          expandRecord = {this.expandRecord.bind(this)}
+          showTestFeedback = {this.showTestFeedback.bind(this)}
+          getTestNameById = {this.getTestNameById.bind(this)}
+        />
       </div>
     )
   }
