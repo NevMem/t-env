@@ -26,7 +26,7 @@ app.set('view engine', 'pug')
 app.use(express.static('public'))
 
 app.get('/', (req, res) => {
-    res.render('main')
+    res.send('This kind of connectios is not supported yet')
 })
 
 io.on('connection', socket => {

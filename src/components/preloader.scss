@@ -1,0 +1,38 @@
+.preloader-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  .preloader {
+    $count: 16;
+    $duration: 0.7;
+    $delay: 0.7;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    @for $i from 1 through $count {
+      & .col:nth-child(#{$i}) {
+        width: 5px;
+        height: 10px;
+        background-color: rgb(119, 150, 255);
+        margin-left: 3px;
+        margin-right: 3px;
+        animation: rs #{$duration}s ease-in-out infinite;
+        animation-delay: #{$delay * $i / $count}s;
+        border-radius: 5px;
+      }
+    }
+    @keyframes rs {
+      0% {
+        height: 10px;
+      }
+      50% {
+        height: 40px;
+        background-color: rgb(199, 0, 255);
+      }
+      100% {
+        height: 10px;
+      }
+    }
+  }
+}

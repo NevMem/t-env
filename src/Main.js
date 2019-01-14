@@ -8,6 +8,7 @@ import Notifications from './components/Notifications'
 import CompilationOut from './components/CompilationOut'
 import Header from './components/Header.js'
 import TestsCard from './components/TestsCard';
+import Preloader from './components/Preloader';
 
 export default class App extends Component {
   constructor(prps) {
@@ -252,13 +253,13 @@ export default class App extends Component {
       input = this.state.tests[this.state.testIndex].input
       answer = this.state.tests[this.state.testIndex].answer
       if (input === undefined) {
-        input = 'Undefind'
+        input = <Preloader isLoaded = {false} />
         this.state.socket.emit('get test input', {
           testId: this.state.tests[this.state.testIndex].id,
         })
       }
       if (answer === undefined) {
-        answer = 'Undefined'
+        answer = <Preloader isLoaded = {false} />
         this.state.socket.emit('get test answer', {
           testId: this.state.tests[this.state.testIndex].id,
         })
