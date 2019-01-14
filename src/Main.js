@@ -199,7 +199,6 @@ export default class App extends Component {
         this.state.queueIndex !== undefined &&
         this.state.testIndex !== undefined
       ) {
-        console.log(this.state.queue[this.state.queueIndex])
         testName = this.state.getTestNameById[
           this.state.queue[this.state.queueIndex].feedback[this.state.testIndex]
             .testId
@@ -225,10 +224,10 @@ export default class App extends Component {
           })
         }
         if (answer === undefined) {
+          answer = 'Undefined'
           this.state.socket.emit('get test answer', {
             testId: this.state.tests[this.state.testIndex].id,
           })
-          answer = 'Undefined'
         }
         if (
           output === undefined ||

@@ -40,12 +40,14 @@ io.on('connection', socket => {
     }
 
     for (let i = 0; i != worker.getQueue().length; ++i) {
+        let records = worker.getCuttedQueue()
         socket.emit('new record',
-            worker.getQueue()[i]
+            records[i]
         )
     }
 
     socket.on('get test info', (request) => {
+        console.log('get TEST INFO request'.magenta)
         if (!request.id)
             return
         let test = tests.getTestById(request.id)
@@ -59,6 +61,7 @@ io.on('connection', socket => {
     })
 
     socket.on('get test name by id', data => {
+        console.log('get TEST NAME BY ID request'.magenta)
         let test = worker.getTestById(data.testId)
         if (!test)
             return
@@ -66,6 +69,7 @@ io.on('connection', socket => {
     })
 
     socket.on('get test input', data => {
+        console.log('get TEST INPUT request'.magenta)
         let testId = data.testId
         socket.emit('test input', {
             testId: testId,
@@ -74,6 +78,7 @@ io.on('connection', socket => {
     })
 
     socket.on('get test answer', data => {
+        console.log('get TEST ANSWER request'.magenta)
         let testId = data.testId
         socket.emit('test answer', {
             testId: testId,
@@ -82,12 +87,14 @@ io.on('connection', socket => {
     })
 
     socket.on('add test', data => {
+        console.log('add TEST request'.cyan)
         let {input, output, name} = data
         let info = worker.addTest(input, output, name)
         onlineChanges.emit('test added', info)
     })
 
     socket.on('evaluate', settings => {
+        console.log('EVALUATE request'.cyan)
         let compilationArgs = prepareCompilationArgs(settings)
         let runType = 'single'
         if (settings.runType === 'parallel')
@@ -102,7 +109,7 @@ io.on('connection', socket => {
     })
 
     socket.on('delete test', (msg) => {
-        console.log('Request for removing test', msg)
+        console.log('DELETE TEST request'.red)
         let info = worker.deleteTest({ id: msg.testId })
         socket.emit('info', info.userMessage)
         if (info.result === 'ok') {

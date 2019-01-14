@@ -59,6 +59,19 @@ invokationLoop.on('try run', () => {
     }
 })
 
+let createFullFeedback = index => {
+    let response = []
+    for (let i = 0; i !== invokationQueue[index].feedback.length; ++i) {
+        response.push({
+            time: invokationQueue[index].feedback[i].time,
+            status: invokationQueue[index].feedback[i].status,
+            exitCode: invokationQueue[index].feedback[i].exitCode,
+            testId: invokationQueue[index].feedback[i].testId,
+        })
+    }
+    return response
+}
+
 invokationLoop.on('run', () => {
     let now = invokationQueue[currentIndex]
     let invoker = cp.fork('invoker')
@@ -77,9 +90,11 @@ invokationLoop.on('run', () => {
             invokationQueue[currentIndex].feedback[message.test_id].stderr = message.feedback.stderr
             invokationQueue[currentIndex].feedback[message.test_id].exitCode = message.feedback.exitCode
             invokationQueue[currentIndex].feedback[message.test_id].status = message.feedback.status
+            
             emitOnline('change feedback', {
                 queueIndex: currentIndex, 
-                feedback: invokationQueue[currentIndex].feedback
+                // feedback: invokationQueue[currentIndex].feedback
+                feedback: createFullFeedback(currentIndex)
             })
         } else if (message.type === 'change status') {
             invokationQueue[currentIndex].status = message.status
@@ -193,6 +208,31 @@ exports.getTestById = (id) => {
 
 exports.getQueue = () => {
     return invokationQueue
+}
+
+
+/**
+ * getCuttedQueue
+ * returns all record in queue
+ * but with cutted feedback, this is how I'll try
+ * to reduce amount of information, 
+ * which will be sent to user right after first page loading
+ */
+exports.getCuttedQueue = () => {
+    let response = []
+    for (let index = 0; index !== invokationQueue.length; ++index) {
+        response.push({
+            feedback: createFullFeedback(index),
+            timelimit: invokationQueue[index].timelimit,
+            policy: invokationQueue[index].policy,
+            filename: invokationQueue[index].filename,
+            policy: invokationQueue[index].policy,
+            compilation_out: invokationQueue[index].compilation_out,
+            status: invokationQueue[index].status,
+            compilationArgs: invokationQueue[index].compilationArgs
+        })
+    }
+    return response
 }
 
 exports.deleteTest = (info) => {
