@@ -47,6 +47,7 @@ class App extends Component {
     })
     this.state.socket.on('new record', record => {
       record.expanded = false
+      this.props.dispatch({ type: 'add record', payload: Object.assign({}, record) })
       this.setState({ queue: [record, ...this.state.queue] })
     })
     this.state.socket.on('delete test', testInfo => {
@@ -312,13 +313,13 @@ class App extends Component {
   }
 
   expandRecord(index, event) {
-    this.props.dispatch({ type: 'some', payload: 'info' })
     event.preventDefault()
-    this.setState({
-      queue: update(this.state.queue, {
-        [index]: { $merge: { expanded: !this.state.queue[index].expanded } },
-      }),
-    })
+    this.props.dispatch({ type: 'toggle expanding', payload: { index } })
+    // this.setState({
+    //   queue: update(this.state.queue, {
+    //     [index]: { $merge: { expanded: !this.state.queue[index].expanded } },
+    //   }),
+    // })
     for (let i = 0; i != this.state.queue[index].feedback.length; ++i) {
       let element = this.state.queue[index].feedback[i]
       if (
@@ -385,6 +386,7 @@ class App extends Component {
   }
 
   render() {
+    console.log('Rerendering')
     return (
       <div className='wrapper'>
         <Modal
@@ -409,7 +411,7 @@ class App extends Component {
           evaluate={this.evaluate.bind(this)}
         />
         <QueueCard
-          queue = {this.state.queue}
+          queue = {this.props.queue}
           expandRecord = {this.expandRecord.bind(this)}
           showTestFeedback = {this.showTestFeedback.bind(this)}
           getTestNameById = {this.getTestNameById.bind(this)}
