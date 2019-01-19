@@ -4,6 +4,7 @@ import App from './Main.js'
 import './main.css'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
+import { RE_INIT, ADD_RECORD, TOGGLE_EXPANDING, ADD_STDOUT } from './types.js';
 
 const initialState = {
   queue: []
@@ -11,11 +12,35 @@ const initialState = {
 
 let reducer = (state = initialState, action) => {
   let { type, payload } = action
-  if (type === 'add record') {
+  if (type === RE_INIT) {
+    return { ...initialState }
+  }
+  if (type === ADD_RECORD) {
     let new_state = { ...state, queue: [ payload, ...state.queue ] }
     return new_state
   }
-  if (type === 'toggle expanding') {
+  if (type === ADD_STDOUT) {
+    let { queueIndex, testIndex, stdout } = payload
+    return {
+      ...state,
+      queue: state.queue.map((el, index) => {
+        if (index === state.queue.length - 1 - queueIndex) {
+          return {
+            ...el,
+            feedback: el.feedback.map((element, index) => {
+              if (index === testIndex) {
+                console.log(stdout)
+                return { ...element, stdout: stdout }
+              }
+              return element
+            })
+          }
+        }
+        return el
+      })
+    }
+  }
+  if (type === TOGGLE_EXPANDING) {
     return {
       ...state,
       queue: state.queue.map((el, index) => {

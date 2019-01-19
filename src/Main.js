@@ -11,6 +11,8 @@ import ModerateTestForm from './components/ModerateTestForm'
 import Preloader from './components/Preloader'
 import QueueCard from './components/cards/QueueCard'
 import { connect } from 'react-redux'
+import { toggleExpanding, reInit, disconnect, addRecord, addTestStdout } from './types';
+import ShowFeedback from './components/ShowFeedback';
 
 class App extends Component {
   constructor(prps) {
@@ -40,15 +42,15 @@ class App extends Component {
         msg: 'connected to server',
         heading: 'client',
       })
-      this.setState({ online: true, tests: [], queue: [] })
+      this.setState({ online: true, tests: [] })
+      this.props.dispatch(reInit())
     })
     this.state.socket.on('new test', test => {
       this.setState({ tests: [...this.state.tests, test] })
     })
     this.state.socket.on('new record', record => {
       record.expanded = false
-      this.props.dispatch({ type: 'add record', payload: Object.assign({}, record) })
-      this.setState({ queue: [record, ...this.state.queue] })
+      this.props.dispatch(addRecord(record))
     })
     this.state.socket.on('delete test', testInfo => {
       this.setState(state => {
@@ -96,13 +98,14 @@ class App extends Component {
     })
     this.state.socket.on('test output', data => {
       let { queueIndex, testIndex, stdout } = data
-      this.setState(state => {
+      this.props.dispatch(addTestStdout(queueIndex, testIndex, stdout))
+      /* this.setState(state => {
         let new_state = Object.assign({}, state)
         if (queueIndex !== undefined && 0 <= queueIndex && queueIndex < new_state.queue.length &&
           testIndex !== undefined && 0 <= testIndex && testIndex < new_state.queue[queueIndex].feedback.length)
           new_state.queue[new_state.queue.length - 1 - queueIndex].feedback[testIndex].stdout = stdout
         return new_state
-      })
+      }) */
     })
     this.state.socket.on('test name by id', data => {
       this.setState(({ getTestNameById }) => {
@@ -112,7 +115,7 @@ class App extends Component {
         return { getTestNameById: newInfo }
       })
     })
-    this.state.socket.on('change feedback', message => {
+    /* this.state.socket.on('change feedback', message => { // TODO:
       this.setState({
         queue: update(this.state.queue, {
           [this.state.queue.length - 1 - message.queueIndex]: {
@@ -122,11 +125,11 @@ class App extends Component {
           },
         }),
       })
-    })
+    }) */
     this.state.socket.on('info', msg => {
       this.addNotification(msg)
     })
-    this.state.socket.on('change status', status => {
+    /* this.state.socket.on('change status', status => { // TODO:
       this.setState({
         queue: update(this.state.queue, {
           [this.state.queue.length - 1 - status.queueIndex]: {
@@ -136,8 +139,8 @@ class App extends Component {
           },
         }),
       })
-    })
-    this.state.socket.on('change compilation out', msg => {
+    })*/
+    /* this.state.socket.on('change compilation out', msg => { // TODO:
       let index = msg.queueIndex
       let out = msg.compilation_out
       if (index >= 0 && index < this.state.queue.length) {
@@ -151,14 +154,15 @@ class App extends Component {
           }),
         })
       }
-    })
+    }) */
     this.state.socket.on('disconnect', () => {
       this.addNotification({
         type: 'error',
         msg: 'disconnected from server',
         heading: 'client',
       })
-      this.setState({ online: false, tests: [], queue: [], modalVisible: false, modalMode: 'none' })
+      this.setState({ online: false, tests: [], modalVisible: false, modalMode: 'none' })
+      this.props.dispatch(disconnect())
     })
   }
 
@@ -191,16 +195,48 @@ class App extends Component {
     this.state.socket.emit('delete test', {
       testId: this.state.tests[this.state.testIndex].id
     })
-    this.setState({
-      modalMode: 'none',
-      modalVisible: false,
-    })
+    this.closeModal()
     this.addNotification({ heading: 'Deleting', msg: 'Request for test removing was send', type: 'default' })
+  }
+
+  loadTestOutput(queueIndex, testIndex) {
+    this.state.socket.emit('get test output', {
+      queueIndex: queueIndex,
+      testIndex: testIndex,
+    })
+  }
+
+  loadTestInput(testId) {
+    this.state.socket.emit('get test input', {
+      testId: testId
+    })
+  }
+
+  loadTestAnswer(testId) {
+    this.state.socket.emit('get test answer', {
+      testId: testId
+    })
   }
 
   renderModalContent() {
     if (this.state.modalMode === 'none') return null
     if (this.state.modalMode === 'show feedback') {
+      return (
+        <ShowFeedback
+          testName = {this.state.getTestNameById[
+            this.props.queue[this.state.queueIndex].feedback[this.state.testIndex]
+              .testId
+          ]}
+          test = {this.state.tests[this.state.testIndex]}
+          feedback = {this.props.queue[this.state.queueIndex].feedback[this.state.testIndex]}
+          testId = {this.state.tests[this.state.testIndex].id}
+          loadTestInput = {this.loadTestInput.bind(this)}
+          loadTestOutput = {this.loadTestOutput.bind(this, this.props.queue.length - 1 - this.state.queueIndex, this.state.testIndex)}
+          loadTestAnswer = {this.loadTestAnswer.bind(this)}
+        />
+      )
+    }
+    if (this.state.modalMode === 'show feedback old') {
       let testName = 'Undefined'
       let timeConsumed = 'Undefined'
       let exitCode = 'Undefined'
@@ -232,25 +268,18 @@ class App extends Component {
         answer = this.state.tests[this.state.testIndex].answer
         if (input === undefined) {
           input = <Preloader isLoaded = {false} />
-          this.state.socket.emit('get test input', {
-            testId: this.state.tests[this.state.testIndex].id,
-          })
+          loadTestInput(this.state.tests[this.state.testIndex].id)
         }
         if (answer === undefined) {
           answer = <Preloader isLoaded = {false} />
-          this.state.socket.emit('get test answer', {
-            testId: this.state.tests[this.state.testIndex].id,
-          })
+          loadTestAnswer(this.state.tests[this.state.testIndex].id)
         }
         if (
           output === undefined ||
           (output !== undefined && output.length === 0)
         ) {
           if (output === undefined) {
-            this.state.socket.emit('get test output', {
-              queueIndex: this.state.queue.length - 1 - this.state.queueIndex,
-              testIndex: this.state.testIndex,
-            })
+            loadTestOutput(this.props.queue.length - 1 - this.state.queueIndex, this.state.testIndex)
             output = <Preloader isLoaded = {false} />
           } else {
             output = 'none'
@@ -314,14 +343,9 @@ class App extends Component {
 
   expandRecord(index, event) {
     event.preventDefault()
-    this.props.dispatch({ type: 'toggle expanding', payload: { index } })
-    // this.setState({
-    //   queue: update(this.state.queue, {
-    //     [index]: { $merge: { expanded: !this.state.queue[index].expanded } },
-    //   }),
-    // })
-    for (let i = 0; i != this.state.queue[index].feedback.length; ++i) {
-      let element = this.state.queue[index].feedback[i]
+    this.props.dispatch(toggleExpanding(index))
+    for (let i = 0; i != this.props.queue[index].feedback.length; ++i) {
+      let element = this.props.queue[index].feedback[i]
       if (
         !this.state.getTestNameById[element.testId] &&
         !this.state.requested[element.testId]

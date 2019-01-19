@@ -16,7 +16,6 @@ export default class QueueCard extends Component {
   }
 
   render() {
-    console.log(this.props.queue.length)
     return (
       <div className='queue-card'>
         <div className='queue'>
