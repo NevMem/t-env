@@ -11,7 +11,6 @@ export default class ShowFeedback extends Component {
     testName: PropTypes.string.isRequired,
     feedback: PropTypes.any.isRequired,
     test: PropTypes.any.isRequired,
-    testId: PropTypes.string.isRequired,
     loadTestInput: PropTypes.func.isRequired,
     loadTestOutput: PropTypes.func.isRequired,
     loadTestAnswer: PropTypes.func.isRequired,
@@ -47,11 +46,11 @@ export default class ShowFeedback extends Component {
 
     if (input === undefined) {
       input = <Preloader isLoaded = {false} />
-      this.props.loadTestInput(this.props.testId)
+      this.props.loadTestInput()
     }
     if (answer === undefined) {
       answer = <Preloader isLoaded = {false} />
-      this.props.loadTestAnswer(this.props.testId)
+      this.props.loadTestAnswer()
     }
     if (
       output === undefined ||

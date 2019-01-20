@@ -29,7 +29,6 @@ let reducer = (state = initialState, action) => {
             ...el,
             feedback: el.feedback.map((element, index) => {
               if (index === testIndex) {
-                console.log(stdout)
                 return { ...element, stdout: stdout }
               }
               return element

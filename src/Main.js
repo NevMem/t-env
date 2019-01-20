@@ -218,6 +218,12 @@ class App extends Component {
     })
   }
 
+  loadTestName(testId) {
+    this.state.socket.emit('get test name by id', {
+      testId: testId
+    })
+  }
+
   renderModalContent() {
     if (this.state.modalMode === 'none') return null
     if (this.state.modalMode === 'show feedback') {
@@ -229,10 +235,9 @@ class App extends Component {
           ]}
           test = {this.state.tests[this.state.testIndex]}
           feedback = {this.props.queue[this.state.queueIndex].feedback[this.state.testIndex]}
-          testId = {this.state.tests[this.state.testIndex].id}
-          loadTestInput = {this.loadTestInput.bind(this)}
+          loadTestInput = {this.loadTestInput.bind(this, this.state.tests[this.state.testIndex].id)}
           loadTestOutput = {this.loadTestOutput.bind(this, this.props.queue.length - 1 - this.state.queueIndex, this.state.testIndex)}
-          loadTestAnswer = {this.loadTestAnswer.bind(this)}
+          loadTestAnswer = {this.loadTestAnswer.bind(this, this.state.tests[this.state.testIndex].id)}
         />
       )
     }
@@ -354,11 +359,7 @@ class App extends Component {
           ({ requested }) => {
             requested: new Set(requested.add(element.testId))
           },
-          () => {
-            this.state.socket.emit('get test name by id', {
-              testId: element.testId,
-            })
-          },
+          () => this.loadTestName(element.testId)
         )
       }
     }
