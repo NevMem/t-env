@@ -4,7 +4,7 @@ import App from './Main.js'
 import './main.css'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import { RE_INIT, ADD_RECORD, TOGGLE_EXPANDING, ADD_STDOUT } from './types.js';
+import { RE_INIT, ADD_RECORD, TOGGLE_EXPANDING, ADD_STDOUT, CHANGE_STATUS } from './types.js';
 
 const initialState = {
   queue: []
@@ -46,6 +46,17 @@ let reducer = (state = initialState, action) => {
         if (index === payload.index) {
           return { ...el, expanded: !el.expanded }
         }
+        return el
+      })
+    }
+  }
+  if (type === CHANGE_STATUS) {
+    const { queueIndex, status } = payload
+    return {
+      ...state,
+      queue: state.queue.map((el, index) => {
+        if (index === state.queue.length - 1 - queueIndex)
+          return { ...el, status: status }
         return el
       })
     }

@@ -3,6 +3,14 @@ export const RE_INIT = 're_init'
 export const ADD_RECORD = 'add record'
 export const TOGGLE_EXPANDING = 'toggle expanding'
 export const DISCONNECT = 'disconnect'
+export const CHANGE_STATUS = 'change status'
+
+export const changeStatus = status => {
+  return {
+    type: CHANGE_STATUS,
+    payload: status
+  }
+}
 
 export let addRecord = (record) => {
   return {

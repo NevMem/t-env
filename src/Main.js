@@ -11,7 +11,7 @@ import ModerateTestForm from './components/ModerateTestForm'
 import Preloader from './components/Preloader'
 import QueueCard from './components/cards/QueueCard'
 import { connect } from 'react-redux'
-import { toggleExpanding, reInit, disconnect, addRecord, addTestStdout } from './types';
+import { toggleExpanding, reInit, disconnect, addRecord, addTestStdout, changeStatus } from './types';
 import ShowFeedback from './components/ShowFeedback';
 
 class App extends Component {
@@ -128,6 +128,9 @@ class App extends Component {
     }) */
     this.state.socket.on('info', msg => {
       this.addNotification(msg)
+    })
+    this.state.socket.on('change status', status => {
+      this.props.dispatch(changeStatus(status))
     })
     /* this.state.socket.on('change status', status => { // TODO:
       this.setState({
