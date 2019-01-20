@@ -11,8 +11,8 @@ import ModerateTestForm from './components/ModerateTestForm'
 import Preloader from './components/Preloader'
 import QueueCard from './components/cards/QueueCard'
 import { connect } from 'react-redux'
-import { toggleExpanding, reInit, disconnect, addRecord, addTestStdout, changeStatus } from './types';
-import ShowFeedback from './components/ShowFeedback';
+import { toggleExpanding, reInit, disconnect, addRecord, addTestStdout, changeStatus, changeFeedback } from './types'
+import ShowFeedback from './components/ShowFeedback'
 
 class App extends Component {
   constructor(prps) {
@@ -115,6 +115,9 @@ class App extends Component {
         return { getTestNameById: newInfo }
       })
     })
+    this.state.socket.on('change feedback', info => {
+      this.props.dispatch(changeFeedback(info))
+    })
     /* this.state.socket.on('change feedback', message => { // TODO:
       this.setState({
         queue: update(this.state.queue, {
@@ -132,17 +135,6 @@ class App extends Component {
     this.state.socket.on('change status', status => {
       this.props.dispatch(changeStatus(status))
     })
-    /* this.state.socket.on('change status', status => { // TODO:
-      this.setState({
-        queue: update(this.state.queue, {
-          [this.state.queue.length - 1 - status.queueIndex]: {
-            $merge: {
-              status: status.status,
-            },
-          },
-        }),
-      })
-    })*/
     /* this.state.socket.on('change compilation out', msg => { // TODO:
       let index = msg.queueIndex
       let out = msg.compilation_out
