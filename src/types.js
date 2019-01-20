@@ -20,34 +20,34 @@ export const changeStatus = status => {
   }
 }
 
-export let addRecord = (record) => {
+export const addRecord = (record) => {
   return {
     type: ADD_RECORD,
     payload: { ...record }
   }
 }
 
-export let addTestStdout = (queueIndex, testIndex, stdout) => {
+export const addTestStdout = (queueIndex, testIndex, stdout) => {
   return {
     type: ADD_STDOUT,
     payload: { queueIndex, testIndex, stdout }
   }
 }
 
-export let toggleExpanding = index => {
+export const toggleExpanding = index => {
   return {
     type: TOGGLE_EXPANDING,
     payload: { index }
   }
 }
 
-export let reInit = () => {
+export const reInit = () => {
   return {
     type: RE_INIT
   }
 }
 
-export let disconnect = () => {
+export const disconnect = () => {
   return {
     type: DISCONNECT
   }
